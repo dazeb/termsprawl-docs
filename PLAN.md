@@ -43,13 +43,21 @@ for a fresh session — AGENTS.md is added only with explicit consent.
 - Cloud: GitHub device-flow sign-in; Back up now (manual — no auto-backup yet);
   encrypted server-side with your key; Free/Pro plan tiers shown in Settings.
 
+## Updates since first draft
+
+- **Domain wired** (2026-08-24): `docs.termsprawl.com` is live. Cloudflare
+  A record `docs` -> 178.104.6.193 (proxied) via the token in
+  `~/secrets/cloudflare-agentpolitico.env` (the `cloudflare-dazeb-dev.env`
+  token cannot see the termsprawl.com zone). Deployed by
+  `scripts/deploy-hermes-box.sh` to `/var/www/termsprawl-docs`, managed Caddy
+  block `# BEGIN/END managed termsprawl-docs`, LE cert issued through the
+  Cloudflare proxy. `app/routes/home.tsx` redirects `/` -> `/docs`.
+- The termsprawl-web deploy owns the `# BEGIN/END managed termsprawl.com`
+  block; the docs deploy owns its own block — they don't clash.
+
 ## Follow-ups
 
-1. **Domain wiring (user decision)** — serve `build/client` at
-   `docs.termsprawl.com` (recommended, no base change) or `termsprawl.com/docs`
-   (needs Vite `base` + React Router `basename` of `/docs`, plus a Caddy
-   `/docs/*` SPA-fallback route). Do not touch the live marketing site or its
-   Caddy block without confirmation.
+1. ~~**Domain wiring (user decision)**~~ — done; see above.
 2. **Add `AGENTS.md`** for this repo once the user consents (currently gated;
    plan lives here in PLAN.md).
 3. **Cross-check with the app** as it ships phases — keep docs aligned with
