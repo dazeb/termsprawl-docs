@@ -1,0 +1,22 @@
+# BEGIN managed termsprawl-docs
+docs.termsprawl.com {
+	encode gzip zstd
+
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		X-XSS-Protection "1; mode=block"
+	}
+
+	# Static SPA (prerendered docs HTML + fallback for client routes).
+	handle {
+		root * /var/www/termsprawl-docs
+		try_files {path}/index.html {path} /index.html
+		file_server
+		header /assets/* Cache-Control "public, max-age=31536000, immutable"
+		header /index.html Cache-Control "no-store, must-revalidate"
+	}
+}
+# END managed termsprawl-docs
