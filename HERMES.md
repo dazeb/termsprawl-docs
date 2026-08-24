@@ -41,9 +41,8 @@ Flow wiring). Those belong to the app repo's AGENTS.md, not here.
 Keep the docs honest and current with the app. The app is actively developed
 through phases (see `../termsprawl/PLAN.md`); each shipped phase should get
 (and keep) accurate docs. Agents are the marquee differentiator — the agents
-page should grow as that feature set matures. The docs may eventually also be
-mirrored as a `/docs` path on the main domain; for now it's a dedicated
-subdomain.
+page should grow as that feature set matures. The docs are a dedicated subdomain (`docs.termsprawl.com`), separate from the
+marketing site and the app.
 
 ## Working here
 

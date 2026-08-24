@@ -4,9 +4,8 @@ The documentation site for [termsprawl](https://github.com/dazeb/termsprawl), a
 spatial terminal manager for Linux. Built with
 [Fumadocs](https://fumadocs.dev) on a **React Router (Vite)** SPA — no Next.js.
 
-The docs live under `/docs` and are meant to be served on the main termsprawl
-domain. This is its **own repo**, separate from the app (`termsprawl`) and the
-marketing site (`termsprawl-web`).
+The docs are **live at https://docs.termsprawl.com**. This is its **own repo**,
+separate from the app (`termsprawl`) and the marketing site (`termsprawl-web`).
 
 ## Commands
 
@@ -31,16 +30,15 @@ shipped behaviour — documented features are implemented features.
 
 ## Deploying
 
-The build is a static React Router SPA (`build/client`). It is **not yet wired
-into the live domain**. Two options when you're ready:
+The build is a static React Router SPA (`build/client`). It is **live at
+https://docs.termsprawl.com**: a Cloudflare A record (`docs` -> 178.104.6.193,
+proxied) serves it on hermes-box from `/var/www/termsprawl-docs` via Caddy, with
+an auto-issued Let's Encrypt certificate.
 
-- **Subdomain (`docs.termsprawl.com`)** — serve `build/client` statically as the
-  root of a subdomain. No base-path change needed. Recommended.
-- **Subpath (`termsprawl.com/docs`)** — requires setting a Vite `base` /
-  React Router `basename` of `/docs` so asset paths resolve, plus a Caddy
-  `/docs/*` route with an SPA fallback.
-
-Wire-up is a deliberate follow-up so the domain choice stays yours.
+Deploy with `./scripts/deploy-hermes-box.sh` — it builds, streams `build/client`
+over ssh+tar, and updates its own `# BEGIN/END managed termsprawl-docs` Caddy
+block (validates + reloads, restoring a backup on failure). The termsprawl-web
+deploy owns a separate managed block, so the two never clash.
 
 ## Related repos
 
