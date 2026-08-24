@@ -1,0 +1,82 @@
+---
+title: Nodes
+description: Reference for the node kinds you can place on the canvas — terminal, sticky, group, editor, diff, and druk.
+---
+
+Nodes are the things you place on the canvas. Each kind is a first-class
+citizen: it moves, selects, and deletes like any other. This page is a neutral
+reference — the "what exactly does this do" for each kind.
+
+## Terminal
+
+A real shell inside a persistent `tmux` session, rendered with xterm.js.
+
+- Runs a genuine PTY in the project folder.
+- Drag the header to move; dwell on the body to type.
+- Survives restarts; cold starts replay scrollback with a **session restored** marker.
+- Double-click the header to rename the node.
+
+See [Terminals &amp; sessions](/docs/terminals).
+
+## Sticky note
+
+A colored note on the canvas. Type into it freely — it's a scratchpad, not a
+shell.
+
+- Drag it by the header to move it.
+- The color dot in the header cycles the note's color.
+- Collapse or expand it from the header.
+- Close it to remove the note.
+
+## Group
+
+A frame that groups nodes together. It is the canvas's way of organising related
+work into a bounded region.
+
+- **Group selection** — right-click selected nodes, then choose *Group
+  selection* to frame them.
+- **Ungroup** — right-click a group and choose *Ungroup* to release the frame.
+
+A group is a visual container; it doesn't change what the nodes do.
+
+## Editor
+
+A file editor bound to the project. You can't lose work to a misplaced path:
+the node remembers the file it opened and reopens the same path when the
+project comes back.
+
+- Open a file by clicking it in the file tree, or from a link in a terminal.
+- **Ctrl+S** saves. A lime dot on the node means unsaved changes.
+- **Markdown** files get a preview toggle; raw HTML is stripped for safety.
+- **Images** preview in place and are not editable here.
+
+The Editor uses Monaco under the hood. It is bound to the project directory
+through a safe file service, so it only opens files inside the project.
+
+## Diff
+
+A read-only git diff bound to the project. Use it to inspect a change without
+leaving the canvas.
+
+- **Open** picks a file to diff.
+- The toggle switches the left side between the **staged index** and **HEAD**;
+  the right side is always the working tree.
+- It needs a git repository, and writes nothing back to disk — this is a
+  look, not an edit.
+
+## druk
+
+A node that opens the **druk** TUI code editor in the project folder, still
+inside tmux, with the same hover-guard as a shell.
+
+- Drag the header to move; dwell to type.
+- Closing the node kills the druk session.
+
+druk is useful when you want a full TUI editor in a project without a separate
+terminal setup.
+
+## What's not here
+
+The canvas does not have a command palette yet. Adding nodes is done from the
+right-click menu and the toolbar, not a keyboard shortcut. See
+[Shortcuts](/docs/shortcuts) for the keys that do exist.

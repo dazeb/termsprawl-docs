@@ -1,0 +1,72 @@
+---
+title: Projects
+description: Open a folder as a project, keep your layout in a git-shareable file, and reattach sessions later.
+---
+
+A **project** is a folder. termsprawl maps one project to one tab, and one
+canvas. Open a project and you get a shell in its directory, plus the layout
+you left there last time.
+
+## Open a folder project
+
+1. Click **New project (folder)** in the tab bar.
+2. Choose a directory.
+3. termsprawl opens the tab and spawns a terminal in that folder.
+
+A project needs a default shell and `tmux`. If the folder is a git repository,
+the source-control panel works against it.
+
+## Tabs
+
+Each project is its own tab, so you can work on several folders side by side.
+Tabs are independent canvases — the layout of one never affects another.
+
+## Your layout is a file
+
+Each project's layout is saved to a git-shareable project file inside the
+folder. That means:
+
+- Close and reopen the project and your nodes are exactly where you left them.
+- The layout can be committed and shared with a teammate, or pushed with your
+  code.
+
+<Callout type="info" title="Git-shareable by design">
+  Because the layout lives in the project folder, version control carries it.
+  Commit it with your work and anyone who clones the project gets the canvas
+  layout too.
+</Callout>
+
+## Close, archive, and delete
+
+Right-click (or long-press) a tab for the project menu:
+
+- **Close** — detaches the project's terminals (sessions keep running) and
+  closes the tab.
+- **Archive** — moves the project to the Closed / archived list without losing
+  its layout.
+- **Delete permanently** — removes the project and its layout. This is the one
+  destructive action; it is confirmed before it runs.
+
+Reopen a Closed / archived project from the dropdown next to the new-project
+buttons.
+
+## Reattach after a restart
+
+Quit the app and reopen it. Your projects are still listed; open one and its
+terminals reattach to the running sessions, scrollback intact. If termsprawl
+was fully stopped, it replays the saved scrollback snapshot with a
+**session restored** marker.
+
+## Remote (SSH) projects
+
+You can open a project on a remote host over SSH. The terminal, files, and git
+run on the remote host while the canvas stays local.
+
+1. Click **New remote (SSH) project** in the tab bar.
+2. Enter the host, a path, and an SSH identity the remote host trusts.
+3. termsprawl opens a remote project tab.
+
+<Callout type="warn" title="SSH key trust">
+  The remote must already trust the private key you supply. Set up the key on
+  the host before opening the project.
+</Callout>

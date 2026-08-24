@@ -1,0 +1,56 @@
+---
+title: Termsprawl Cloud
+description: Sign in and back up your workspace — layouts, projects, and settings — encrypted, to your account.
+---
+
+Termsprawl Cloud is an optional account layer that backs up your workspace so
+you can restore it elsewhere. This page explains what's backed up, how
+encryption works, and how to enable it.
+
+## Sign in
+
+Sign in with GitHub — it's a device flow, so no password is typed into
+termsprawl.
+
+1. Open **Settings**.
+2. Find the Cloud section and click **sign in**.
+3. termsprawl shows a device code and opens GitHub for you to approve it.
+4. Once approved, you're signed in. The panel shows your GitHub login and plan.
+
+## What's backed up
+
+The cloud backup covers your workspace state:
+
+- The list of projects (projects, folders, and remote SSH projects).
+- Each project's canvas layout.
+- App settings and preferences.
+
+<Callout type="info" title="What isn't backed up">
+  The cloud backs up your workspace state and layouts — not your files or your
+  shell history. Your code and documents stay on your machine.
+</Callout>
+
+## Encryption
+
+Backups are encrypted server-side with your key. Your workspace data leaves
+your machine only in encrypted form, and the service can't read it without your
+key. This is the "settings/layout/project backup" phase — the data that's
+backed up is the state that makes termsprawl yours, not your source code.
+
+## Back up now
+
+Push a fresh snapshot of your workspace to the cloud on demand with **Back up
+now** in Settings. There's no scheduled automatic backup yet — run it when you
+want a checkpoint.
+
+## Plans
+
+Cloud accounts have a **Free** tier and a **Pro** tier (Pro adds more backup
+storage and longer retention). The status line in Settings shows which plan
+you're on.
+
+<Callout type="tip" title="Why this matters">
+  Closed apps lose nothing because your sessions live in tmux. The cloud layer
+  is the next step: move to a new machine, sign in, and your whole workspace —
+  layouts, projects, settings — comes back with you.
+</Callout>

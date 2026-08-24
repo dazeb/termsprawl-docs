@@ -1,0 +1,71 @@
+---
+title: The canvas
+description: Move, group, and arrange nodes on the infinite canvas — pan, zoom, select, and the right-click menu.
+---
+
+The canvas is the heart of termsprawl: an infinite dot-grid surface where every
+terminal, note, editor, and agent is a node you place exactly where you want
+it.
+
+## Pan and zoom
+
+- **Pan** — drag the empty canvas, or scroll. 
+- **Zoom** — use the on-screen zoom controls (bottom-left), or pinch on a
+  trackpad.
+- **Fit view** — the canvas starts fitted to your nodes; use the controls to
+  refit at any time.
+- **Mini-map** — a small map of the whole canvas lives in the corner for
+  jumping around a large layout.
+
+## Move nodes
+
+Drag any node by its **header** (a bar at the top of the node). The empty
+canvas pans independently, so you can pull a node anywhere.
+
+<Callout type="warn" title="Don't drag a terminal by its body">
+  Terminals, agents, and the druk editor use a hover-guard: **drag the header to
+  move, dwell on the body to type**. Dragging the body can enter text instead of
+  moving the node. Use the header to reposition.
+</Callout>
+
+## Select and delete
+
+- Click a node to select it.
+- Drag in empty space to **box-select** multiple nodes.
+- Press **Delete** or **Backspace** to delete selected nodes. Deleting a
+  terminal also kills its session, so only delete nodes you no longer want.
+
+## Undo / redo
+
+- **Ctrl+Z** — undo the last layout change.
+- **Ctrl+Shift+Z** — redo.
+
+Undo tracks the layout. It pauses while you type in an input or terminal, so
+it doesn't fight your shell prompt.
+
+## The right-click menu
+
+Right-click on the canvas or a node for the context menu. It offers:
+
+- **Group selection** — frame selected nodes into a group.
+- **Close** — close the node under the cursor.
+- **Branch session** / **Resume session in new node** / **link to another
+  agent** — for Claude agent nodes. See [Agents](/docs/agents).
+- **New terminal** — add a terminal to the active project.
+- **New sticky note** — add a note.
+- **New diff** — add a diff view.
+- **New editor** — add a file editor.
+- **Open druk** — open the druk TUI editor in the project folder.
+- **Open agent ▾** — choose an agent (Claude, Codex, Gemini, Grok) to spawn.
+
+## The file tree
+
+Hover a canvas edge to reveal the project's file tree. Open a file from it to
+create an editor node, or use it to jump around the project without leaving
+the canvas.
+
+## Arrange it your way
+
+Layout is the product. Spread terminals across the canvas, group related work,
+zoom out to see the whole set of running sessions, and zoom in to work. A
+spatial layout beats a tab bar you forget.

@@ -1,0 +1,65 @@
+---
+title: Terminals &amp; sessions
+description: How terminal nodes run real shells inside persistent tmux sessions, and why your work survives a restart.
+---
+
+A **terminal node** is a genuine shell — not a mockup. It runs a real PTY
+rendered with xterm.js, inside a persistent `tmux` session. That persistence is
+the whole point: close a project or quit the app and the session survives.
+
+## Why sessions survive restarts
+
+Every terminal node runs inside its own `tmux` session. When you close a
+project tab or quit termsprawl, the app **detaches** from the session instead
+of killing it. Reopen the same project and the terminal node **reattaches** to
+that same session, exactly where you left it.
+
+<Callout type="info" title="Detach, not kill">
+  Detaching leaves the shell running in the background. tmux keeps it alive, so
+  a long-running command (a build, a test suite, an agent) keeps going even
+  when termsprawl is closed. Deleting a node is the only thing that truly
+  ends its session.
+</Callout>
+
+## Cold-start scrollback replay
+
+When a session was fully gone (the app wasn't running at all), termsprawl
+replays a saved scrollback snapshot on the next open. You'll see a
+**session restored** marker where the history resumes — so you don't lose
+context just because the app wasn't running.
+
+## Using a terminal
+
+- **Type** into it like any terminal.
+- **Drag the header** to move the node; **dwell on the body** to type. The
+  hover-guard keeps dragging and typing from colliding.
+- **Scroll** to page through tmux history.
+- **Select** with tmux copy-mode; copied text goes to the system clipboard.
+
+<Callout type="warn" title="tmux is a hard requirement">
+  Without `tmux >= 3.2` in your PATH, terminals still appear but lose session
+  continuity and scrollback across restarts. Install it before relying on
+  persistence.
+</Callout>
+
+## Beyond the shell
+
+The same PTY mechanism powers other node kinds that are really a terminal
+running a preset command:
+
+- **Agents** — an agent node launches a CLI (Claude, Codex, Gemini, Grok) once,
+  inside tmux. Status badges come from the CLI's hooks. See [Agents](/docs/agents).
+- **druk** — a node that launches the druk TUI editor, still inside tmux, with
+  the same hover-guard as a shell. Closing it kills the druk session.
+
+## Markdown output and links
+
+A terminal can render output as Markdown where it makes sense, and it detects
+links so URLs open in a browser and file paths open in the editor. These are
+conveniences on top of a real shell — the shell is always the source of truth.
+
+## Wrapping up
+
+The practical upshot: start a build, close the app, come back hours later, and
+the terminal is still running with its history. Tabs can't do that. A spatial
+canvas with persisted tmux sessions can.

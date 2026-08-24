@@ -1,0 +1,80 @@
+---
+title: FAQ
+description: Common questions about requirements, launch errors, and the platform.
+---
+
+## What do I need to run it?
+
+A Linux desktop with a shell and these pieces:
+
+- **tmux >= 3.2** in your PATH (required for session continuity and scrollback).
+- **FUSE** for the AppImage (`libfuse2t64` on Ubuntu 24.04, `libfuse2` on
+  20.04–22.04, `fuse-libs` on Fedora, `fuse2` on Arch).
+- **glibc >= 2.31** (Ubuntu 20.04+).
+- **Geist / Geist Mono** fonts are optional; without them it falls back to
+  JetBrains Mono / monospace.
+
+## `tmux: command not found`
+
+tmux isn't installed. Install it:
+
+```bash
+sudo apt install tmux   # Debian/Ubuntu
+dnf install tmux        # Fedora
+pacman -S tmux          # Arch
+```
+
+Terminals will still appear without tmux, but they lose session continuity and
+scrollback across restarts. Install it and reopen the project.
+
+## The AppImage won't launch
+
+That's almost always FUSE. Install `libfuse2` / `libfuse2t64` (see above), or
+run without FUSE:
+
+```bash
+./termsprawl-*.AppImage --appimage-extract-and-run
+```
+
+## "not a git repository"
+
+The source-control panel needs a folder project that's a git repository. Open a
+folder with a `.git` directory, or run `git init` in it first. Projects without
+a folder, or without git, have no panel.
+
+## Why do my terminals disappear when I quit?
+
+They shouldn't — that's the point. Closing a project tab or quitting detaches
+them, and tmux keeps them alive. If you've deleted the node, or tmux isn't
+installed, the session is gone. Check tmux is installed, then reopen the
+project to reattach.
+
+## "session restored" appears at the top of my terminal
+
+That's the scrollback replay marker. termsprawl stores a bounded snapshot of
+each terminal's history and replays it when the app wasn't running, so you
+don't lose context. It only covers the saved last chunk — the full tmux history
+isn't replayed if the session itself was gone.
+
+## Can I use it on macOS or Windows?
+
+No. termsprawl is Linux-only by design and has no macOS or Windows build.
+
+## Clipboard doesn't work
+
+Copying in a terminal goes through tmux's copy-mode using OSC 52. It needs
+nothing extra, but if your shell or a program started its own clipboard
+handling, that can get in the way. Use tmux copy-mode selection to copy; that
+path writes to the system clipboard.
+
+## Where are my layouts stored?
+
+Each project's layout is kept in a git-shareable project file inside the folder.
+That's why you can commit it with your work and share it. The app keeps its own
+index of projects and settings in its private data directory.
+
+## How do I report a bug?
+
+Open an issue on the [termsprawl GitHub
+repo](https://github.com/dazeb/termsprawl/issues). Include your distro, the
+version (shown in the toolbar), and the steps to reproduce.

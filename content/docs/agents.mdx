@@ -1,0 +1,76 @@
+---
+title: Agents
+description: Run Claude, Codex, Gemini, or Grok as canvas nodes — spawn, status badges, context links, accounts, and permission modes.
+---
+
+An **agent node** is a terminal node preset that launches an AI coding agent CLI
+once, inside tmux. The agent runs on your machine, in your project, with its
+transcript and status shown on the canvas.
+
+## Supported agents
+
+termsprawl ships presets for four CLIs, plus a custom template:
+
+- **Claude Code** — full support: hooks/status, resume, subagents, recurring, branch, context links, usage, permission mode.
+- **Codex CLI** — resume, subagents, and permission mode (fewer hook integrations).
+- **Gemini CLI** — hooks/status, resume, subagents, usage, permission mode.
+- **Grok** — hooks/status, resume, subagents, recurring, branch, usage, permission mode.
+- **Custom agent** — a template you configure. It is not enabled by default.
+
+<Callout type="info" title="You need the CLI installed">
+  termsprawl launches the agent binary from your PATH. Install `claude`,
+  `codex`, `gemini`, or `grok` yourself first; the agent node just runs it in
+  your project.
+</Callout>
+
+## Spawn an agent
+
+1. Right-click on the canvas.
+2. Choose **Open agent ▾**.
+3. Pick an agent (Claude, Codex, Gemini, Grok).
+
+A node appears, running the agent CLI in the project folder.
+
+## Status badges
+
+Agents that support hooks drive their status from the CLI. The node badge
+shows the agent's state — **RUNNING** while it works, **NEEDS YOU** when it
+stops for input. Badges come from the agent's own hook system, so they're
+accurate.
+
+## Resume and branch (Claude)
+
+Claude Code nodes support conversation continuity:
+
+- **Resume session in new node** — create a new node that reattaches to an
+  existing conversation.
+- **Branch session** — send the /branch command to fork the conversation.
+
+## Context links
+
+You can link agent nodes together so they can read each other's transcripts on
+demand. Right-click an agent node, choose **link to another agent ▾**, and pick
+a peer. This lets agents share context without you copying text between them.
+
+## Managed accounts
+
+Manage per-agent accounts in Settings. This is where you set up a Claude
+account, add an API provider, or add a peer endpoint — without pasting secrets
+into a shell.
+
+<Callout type="warn" title="Secrets stay in Settings">
+  Configure provider keys and accounts in the Settings panel. Don't export them
+  into a shell where they can leak into scrollback.
+</Callout>
+
+## Permission modes
+
+Agents that support it expose a **permission mode** selector. Choose the mode
+the CLI runs with — the available options depend on the CLI version you have
+installed.
+
+## Custom agents
+
+The **Custom agent** preset is a template. To use it you enable and configure
+it in Settings; until then it's visible but not spawnable. Point it at a
+CLI binary that follows the same command pattern as the built-in presets.

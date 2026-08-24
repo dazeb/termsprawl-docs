@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+/* termsprawl brand: black surfaces, lime as the only functional signal.
+   Force dark mode (the app is dark) and pin the palette at :root/.dark so
+   the site renders dark regardless of any theme toggle. */
+:root,
+.dark {
+  color-scheme: dark;
+
+  --color-fd-background: hsl(0, 0%, 4%);
+  --color-fd-foreground: hsl(0, 0%, 93%);
+  --color-fd-muted: hsl(0, 0%, 10%);
+  --color-fd-muted-foreground: hsla(0, 0%, 70%, 0.8);
+  --color-fd-popover: hsl(0, 0%, 8%);
+  --color-fd-popover-foreground: hsl(0, 0%, 88%);
+  --color-fd-card: hsl(0, 0%, 6%);
+  --color-fd-card-foreground: hsl(0, 0%, 93%);
+  --color-fd-border: hsla(0, 0%, 40%, 20%);
+  --color-fd-primary: #02af3e;
+  --color-fd-primary-foreground: #04140a;
+  --color-fd-secondary: hsl(0, 0%, 10%);
+  --color-fd-secondary-foreground: hsl(0, 0%, 90%);
+  --color-fd-accent: hsla(140, 97%, 47%, 0.12);
+  --color-fd-accent-foreground: #03f557;
+  --color-fd-ring: #02af3e;
+  --color-fd-overlay: hsla(0, 0%, 0%, 0.6);
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+body {
+  font-family: 'Geist', 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+code,
+pre,
+kbd,
+.font-mono {
+  font-family: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+  font-feature-settings: 'ss01', 'cv01';
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.03em;
+}

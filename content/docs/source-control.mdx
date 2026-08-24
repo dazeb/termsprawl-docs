@@ -1,0 +1,58 @@
+---
+title: Source control
+description: Stage, commit, branch, and push your project with the git panel — without leaving the canvas.
+---
+
+The source-control panel is a git front-end bound to the active project. Open
+the panel from the toolbar menu (**menu → source control**). It only appears
+for a project that is a git repository.
+
+<Callout type="warn" title="Open a git repo first">
+  The panel needs an active folder project that's a git repository. A project
+  with no folder, or a folder with no `.git`, won't enable it.
+</Callout>
+
+## Branch
+
+The bar at the top shows the current branch and a sync indicator.
+
+- **push** — push the current branch to its remote.
+- **pull** — pull from the remote.
+- **publish** — publish the branch if it has no upstream yet.
+
+## Stage and commit
+
+The file list shows every changed file with its status letter. Each row has:
+
+- **stage / unstage** — move the file into or out of the index.
+- **discard** — throw away working-tree changes (this asks for confirmation).
+
+Below the list, type a commit message and click **commit**.
+
+### AI commit message
+
+Click the AI button and termsprawl generates a commit message for you using a
+local agent CLI you provide. You review it before committing — nothing is
+committed without your go-ahead.
+
+## Branch management
+
+The branches section lists every branch. Create or switch branches from here;
+the working tree and the canvas stay in sync with the selected branch.
+
+## Pushing to GitHub
+
+If the project's remote is GitHub, pushing needs you to be signed in. The panel
+tells you when this is the case:
+
+```bash
+gh auth login
+```
+
+Run that in a terminal and termsprawl picks up the session.
+
+## Worktrees
+
+Worktrees let you check out multiple branches of the same repo side by side.
+They are bound to group frames on the canvas — create a worktree and it becomes
+a frame you can work in without touching your main checkout.

@@ -1,0 +1,16 @@
+{
+  "title": "Docs",
+  "pages": [
+    "index",
+    "getting-started",
+    "canvas",
+    "terminals",
+    "projects",
+    "nodes",
+    "agents",
+    "source-control",
+    "cloud",
+    "shortcuts",
+    "faq"
+  ]
+}

@@ -1,0 +1,53 @@
+---
+title: Shortcuts
+description: The keyboard shortcuts that exist today, stated plainly — no command palette yet.
+---
+
+termsprawl is keyboard-friendly where it matters. These are the keys that work
+today; the canvas has no command palette yet, so node creation is from the
+right-click menu and the toolbar.
+
+## Layout
+
+| Keys | Action |
+| --- | --- |
+| `Ctrl+Z` | Undo the last layout change |
+| `Ctrl+Shift+Z` | Redo |
+
+Undo/redo track the layout and pause while you type in an input or terminal.
+
+## Selection
+
+| Keys | Action |
+| --- | --- |
+| `Delete` | Delete selected nodes |
+| `Backspace` | Delete selected nodes |
+| `Escape` | Close a menu, dialog, or tooltip |
+
+<Callout type="warn" title="Deleting a terminal kills its session">
+  Deleting a terminal node also kills its tmux session — that's the permanent
+  end of it. Close a tab, by contrast, only detaches.
+</Callout>
+
+## In a node
+
+| Keys | Action |
+| --- | --- |
+| `Enter` | Commit an in-place title edit (for node titles) |
+| `Escape` | Cancel an in-place title edit |
+| `Ctrl+S` | Save the open file in an editor node |
+
+## In a terminal
+
+A terminal node is a real shell, so it responds to whatever the shell and your
+app inside it use. tmux's own shortcuts work too; copy-mode selection puts text
+on the system clipboard.
+
+## What's not here yet
+
+- There is **no command palette** (`Ctrl+K`) in this build. Nodes come from the
+  right-click menu and the toolbar.
+- There are **no per-node keyboard shortcuts** beyond what's listed above.
+
+If you want a shortcut you don't see, it's a reasonable feature request — the
+canvas is the right place to raise it.

@@ -1,0 +1,113 @@
+---
+title: Get started
+description: Install termsprawl, open a folder as a project, and run your first terminal on the canvas.
+---
+
+This walkthrough gets a terminal running on the canvas in a few minutes. It
+assumes a Linux desktop, a shell, and basic terminal familiarity.
+
+## 1. Install
+
+Get the latest build from the
+[Releases](https://github.com/dazeb/termsprawl/releases) page. termsprawl ships
+as an **AppImage** and a **.deb**.
+
+<Callout type="warn" title="Check your prerequisites first">
+  Install `tmux` and `libfuse2` before you launch, or sessions won't survive a
+  restart and the AppImage won't run. See the requirements below.
+</Callout>
+
+### Install the .deb (Debian / Ubuntu)
+
+```bash
+sudo apt install ./termsprawl-*.deb
+termsprawl
+```
+
+### Run the AppImage
+
+Make it executable and run it. The `.deb` is the smoother path; the AppImage is
+for anything else.
+
+```bash
+chmod +x ./termsprawl-*.AppImage
+./termsprawl-*.AppImage
+```
+
+If you are on a minimal system without FUSE, unpack and run instead:
+
+```bash
+./termsprawl-*.AppImage --appimage-extract-and-run
+```
+
+### Requirements
+
+- **tmux >= 3.2** — required for session continuity and scrollback. Every
+  terminal runs inside a persistent `tmux` session.
+  `sudo apt install tmux` · `dnf install tmux` · `pacman -S tmux`
+- **FUSE** — to run the AppImage. `libfuse2t64` (Ubuntu 24.04), `libfuse2`
+  (20.04–22.04), `fuse-libs` (Fedora), `fuse2` (Arch).
+- A shell (`$SHELL` or `/bin/bash`) and `glibc >= 2.31` (Ubuntu 20.04+).
+
+<Callout type="info" title="What about Geist fonts?">
+  Geist / Geist Mono are optional. Without them termsprawl falls back to
+  JetBrains Mono / monospace.
+</Callout>
+
+## 2. Launch
+
+Start the app:
+
+```bash
+termsprawl
+```
+
+You see the toolbar with the **termsprawl** brand, an empty canvas, and the
+app version on the right. A dot-grid fills the background.
+
+## 3. Open a folder as a project
+
+A project maps to a folder. Create one from a project tab, and termsprawl opens
+a shell in that directory.
+
+1. Click **New project (folder)** in the tab bar.
+2. Choose a directory.
+3. A terminal node appears on the canvas, already running a shell in that
+   folder.
+
+You can also open the folder from the file tree: hover a canvas edge to bring up
+the project tree, then open a file.
+
+## 4. Run your first terminal
+
+A **terminal node** is a real shell. Type into it like any terminal:
+
+```bash
+ls
+cat README.md
+```
+
+Drag the node by its header to move it. Dwell over it to type. Pan the empty
+canvas by dragging or scrolling; zoom with the on-screen controls or a
+trackpad pinch.
+
+## 5. Close it and come back
+
+Close the project tab (or quit the app). The shell is **detached, not killed**.
+Open the project again, and the terminal reattaches to the same session with
+its history intact — you'll see a **session restored** marker where the
+scrollback resumes.
+
+<Callout type="tip" title="What you just used">
+  The same mechanism keeps every terminal alive. See
+  [Terminals &amp; sessions](/docs/terminals) for how continuity and scrollback
+  work.
+</Callout>
+
+## Next steps
+
+- [The canvas](/docs/canvas) — move, group, and arrange nodes.
+- [Projects](/docs/projects) — tabs, git-shareable layouts, and remote (SSH)
+  projects.
+- [Agents](/docs/agents) — run an AI agent as a node.
+- [Source control](/docs/source-control) — stage and commit from the canvas.
