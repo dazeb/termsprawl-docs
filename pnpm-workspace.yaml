@@ -1,2 +1,8 @@
 allowBuilds:
   esbuild: true
+
+# Force patched uuid (>=11.1.1) for GHSA-w5hq-g745-h8pq.
+# react-d3-tree (via react-router-devtools) still pins uuid@^8.3.1; no fixed
+# upstream release. uuid 11 keeps the CJS `v4` export react-d3-tree requires.
+overrides:
+  uuid: ^11.1.1
