@@ -7,6 +7,14 @@ Nodes are the things you place on the canvas. Each kind is a first-class
 citizen: it moves, selects, and deletes like any other. This page is a neutral
 reference — the "what exactly does this do" for each kind.
 
+## Resizing
+
+Every node kind is resizable. **Select a node** to reveal subtle corner handles
+and a faint outline, then drag a handle to resize it. There is no fixed
+default to fight — each node remembers the size you set, so switching projects
+or restarting the app brings it back exactly as you left it (position and
+size). See [The canvas](/docs/canvas) for the general layout rules.
+
 ## Terminal
 
 A real shell inside a persistent `tmux` session, rendered with xterm.js.
@@ -74,6 +82,31 @@ inside tmux, with the same hover-guard as a shell.
 
 druk is useful when you want a full TUI editor in a project without a separate
 terminal setup.
+
+## Browser
+
+A real, sandboxed Chromium page embedded on the canvas — not a screenshot. Each
+**tab is its own `<webview>` guest**, so tabs run side by side and share a
+persistent cookie profile (logins survive app restarts).
+
+- **One guest per tab** — open tabs from the node toolbar; every tab is an
+  isolated page. Close the last tab and the node closes (browser convention).
+- **Hardened by default** — the guest never carries termsprawl's preload or
+  Node, runs with the Chromium sandbox on, and navigation is policy-filtered
+  (privileged schemes like `file:` and `devtools:` are blocked). Popups are
+  denied, so nothing escapes the node.
+- **Drag / interact** — drag the tab bar or the page to move the node; hover
+  the page without pressing and it becomes interactive after a moment (the same
+  dwell model as terminals). The address bar navigates through the safe
+  URL policy.
+- **Agent control (opt-in, off by default)** — in **Settings → General**, turn
+  on *allow agents to control browser nodes* to expose an agent-driveable CDP
+  surface. When off, the node works normally and no agent endpoint exists at
+  all.
+
+The embedded pages are real Chromium that you use directly, so you can do the
+online work that doesn't belong in a shell — a dashboard, an internal app, a
+search — without leaving the canvas.
 
 ## What's not here
 

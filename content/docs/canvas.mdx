@@ -28,6 +28,13 @@ canvas pans independently, so you can pull a node anywhere.
   moving the node. Use the header to reposition.
 </Callout>
 
+## Resize nodes
+
+Select any node to show subtle resize handles and a faint outline, then drag a
+corner to resize it. Terminals, editors, browser nodes — they all resize.
+The size you set is **remembered**: switch projects or restart the app and
+each node comes back where you left it, at the size you left it.
+
 ## Select and delete
 
 - Click a node to select it.
@@ -58,11 +65,25 @@ Right-click on the canvas or a node for the context menu. It offers:
 - **Open druk** — open the druk TUI editor in the project folder.
 - **Open agent ▾** — choose an agent (Claude, Codex, Gemini, Grok) to spawn.
 
-## The file tree
+## The project sidebar
 
-Hover a canvas edge to reveal the project's file tree. Open a file from it to
-create an editor node, or use it to jump around the project without leaving
-the canvas.
+Hover a canvas edge to slide out the project panel — use the dock icon to flip
+it to the other side and the pin to keep it open. It's a VS Code-style sidebar
+with three sections:
+
+- **Explorer** — the project tree and your open tabs; click a file to open it
+  in an editor node. Dotfiles, `.git`, and `node_modules` are hidden.
+- **Source control** — git for the active project: the current branch, remote,
+  `git push` / `git pull`, and recent history. Source control lives here, so the
+  old settings-menu shortcut to it was removed.
+- **Plugins** — placeholder (coming soon).
+
+## The settings cog
+
+The **cog** button in the toolbar (top-right) opens **Settings** directly — a
+full-width sheet covering General, your user & cloud account, Agents, A2A / API
+connections, and Updates. Source control moved into the sidebar, so the cog is
+a plain one-click path to settings, with no dropdown menu.
 
 ## Arrange it your way
 
