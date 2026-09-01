@@ -1,11 +1,12 @@
 ---
 title: Termsprawl Cloud
-description: Sign in and back up your workspace — layouts, projects, and settings — encrypted, to your account.
+description: Sign in, back up your workspace encrypted, and open your own hosted canvas space in a browser.
 ---
 
-Termsprawl Cloud is an optional account layer that backs up your workspace so
-you can restore it elsewhere. This page explains what's backed up, how
-encryption works, and how to enable it.
+Termsprawl Cloud is an optional account layer: encrypted workspace backup, and
+— on the Canvas plan — your own hosted canvas space that runs in a browser.
+This page explains what's backed up, how encryption works, how spaces work,
+and how to enable it all.
 
 ## Sign in
 
@@ -45,9 +46,56 @@ want a checkpoint.
 
 ## Plans
 
-Cloud accounts have a **Free** tier and a **Pro** tier (Pro adds more backup
-storage and longer retention). The status line in Settings shows which plan
-you're on.
+Cloud accounts have three tiers:
+
+- **Free** — sign in, and that's it.
+- **Pro** — encrypted cloud backup + sync for your workspace ($2/mo).
+- **Canvas** — everything in Pro **plus your own online canvas space** ($5/mo).
+
+The status line in Settings shows which plan you're on, and upgrading is a
+checkout away from the same panel.
+
+## Online canvas spaces
+
+The **Canvas** plan gives you a hosted termsprawl canvas that runs in your
+browser — same nodes, same terminals, reachable from any machine.
+
+1. In Settings, under the cloud section, choose **open your online canvas**.
+   termsprawl provisions a private space for you (first time takes under a
+   minute).
+2. Your canvas opens at `canvas.termsprawl.com/<your-login>` in the browser.
+3. Work there like the desktop app — terminals, sticky notes, agents, and
+   projects all work, and the layout is saved as you go.
+
+### Keeping desktop and online canvas in sync
+
+Settings shows the space rows for the signed-in user:
+
+- **Open your online canvas** — provisions (or reopens) the space and signs
+  you in with a short-lived token.
+- **Open online snapshot** — pulls the space's latest canvas into a NEW local
+  project, so you can look at (or fork) the online state without touching
+  your current work.
+- **Sync this project online** — pushes the active project's canvas to your
+  space.
+
+<Callout type="info" title="Snapshot sync, not live merge">
+  Sync is pull-model snapshots: the online canvas stores the latest snapshot
+  of your workspace, and the desktop pushes or pulls whole snapshots. Your
+  terminals' tmux sessions stay on the machine they run on — the online
+  canvas runs its own terminals in the hosted space.
+</Callout>
+
+### Spaces lifecycle
+
+- **Stop** — the space pauses (no resource use); your canvas is kept, and
+  reopening it brings everything back. The dashboard's SpaceCard has a
+  confirm-gated Stop button.
+- **Idle spaces stop themselves** — a space nobody touches for 30 minutes is
+  stopped automatically; opening it again wakes it (takes a few seconds) with
+  your canvas intact.
+- **Deleting your account** stops the space and removes its data after a
+  7-day grace window.
 
 <Callout type="tip" title="Why this matters">
   Closed apps lose nothing because your sessions live in tmux. The cloud layer

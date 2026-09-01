@@ -104,26 +104,12 @@ scrollback resumes.
   work.
 </Callout>
 
-## Server Edition (canvas in a browser)
-
-Want a quick look at the canvas without installing the desktop app? The repo
-ships a **Server Edition** that serves the same canvas over plain HTTP. From
-the project directory:
-
-```bash
-pnpm run build && pnpm run build:server
-node out/server/index.js        # or: pnpm run start:server
-```
-
-Then open **http://localhost:3110** (change the port with `PORT=...`).
-Terminals and workspace load/save work; git, cloud, managed accounts, and agent
-hooks show as *unavailable*. Embedded browser nodes don't render in a browser
-tab — they use Electron's `<webview>`.
-
-<Callout type="warn" title="In development">
-  Server Edition is an in-progress seam (Phase 10), not the shipping direction —
-  the desktop shell is the product. Treat it as a dev/verification way to view
-  the canvas in a browser, not a supported product.
+<Callout type="info" title="Canvas in your browser — Termsprawl Cloud">
+  Prefer not to install anything, or want your canvas on another machine? The
+  **Canvas plan** hosts a termsprawl canvas for you at
+  `canvas.termsprawl.com` — sign in from the desktop app's Settings (or the
+  website), and open your own online canvas. See
+  [Termsprawl Cloud](/docs/cloud).
 </Callout>
 
 ## Next steps

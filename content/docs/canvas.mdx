@@ -50,6 +50,26 @@ each node comes back where you left it, at the size you left it.
 Undo tracks the layout. It pauses while you type in an input or terminal, so
 it doesn't fight your shell prompt.
 
+## Organize windows
+
+The **organize** button in the toolbar (next to the settings cog) tidies the
+whole canvas in one click. It opens a small menu with three modes:
+
+- **Cascade** — every window stacks on one diagonal, so all the title bars
+  stay reachable. Sticky notes align in a row along the top.
+- **Flat** — all windows sit side by side in a row (it wraps to a new row when
+  it grows past the canvas width); stickies get their own row above.
+- **Restore** — puts everything back how it was before you started
+  organizing. The original arrangement is remembered across layouts, so
+  cascade → flat → restore lands you back where you began. After a restore,
+  the next organize starts a fresh cycle.
+
+<Callout type="info" title="Organizing is undoable and persisted">
+  Each organize is a single undo step (**Ctrl+Z** takes it back), the new
+  layout is saved with the project, and group frames are left untouched —
+  their children move with them.
+</Callout>
+
 ## The right-click menu
 
 Right-click on the canvas or a node for the context menu. It offers:
@@ -62,8 +82,10 @@ Right-click on the canvas or a node for the context menu. It offers:
 - **New sticky note** — add a note.
 - **New diff** — add a diff view.
 - **New editor** — add a file editor.
+- **New browser** — add an embedded browser node.
+- **New chat** — add a chat node (an AI conversation panel, not a terminal).
 - **Open druk** — open the druk TUI editor in the project folder.
-- **Open agent ▾** — choose an agent (Claude, Codex, Gemini, Grok) to spawn.
+- **Open agent ▾** — choose an agent (Claude, Codex, Antigravity, Grok) to spawn.
 
 ## The project sidebar
 
@@ -81,9 +103,11 @@ with three sections:
 ## The settings cog
 
 The **cog** button in the toolbar (top-right) opens **Settings** directly — a
-full-width sheet covering General, your user & cloud account, Agents, A2A / API
-connections, and Updates. Source control moved into the sidebar, so the cog is
-a plain one-click path to settings, with no dropdown menu.
+full-width sheet covering General, your user & cloud account (including your
+online canvas space), Agents, A2A / API connections, and Updates. Source
+control lives in the sidebar, so the cog is a plain one-click path to
+settings, with no dropdown menu. Right next to it sits the **organize**
+button — see [Organize windows](#organize-windows) above.
 
 ## Arrange it your way
 

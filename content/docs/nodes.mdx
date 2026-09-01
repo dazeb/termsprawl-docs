@@ -1,6 +1,6 @@
 ---
 title: Nodes
-description: Reference for the node kinds you can place on the canvas — terminal, sticky, group, editor, diff, and druk.
+description: Reference for the node kinds you can place on the canvas — terminal, sticky, group, editor, diff, chat, and druk.
 ---
 
 Nodes are the things you place on the canvas. Each kind is a first-class
@@ -71,6 +71,17 @@ leaving the canvas.
   the right side is always the working tree.
 - It needs a git repository, and writes nothing back to disk — this is a
   look, not an edit.
+
+## Chat
+
+An AI conversation panel on the canvas — **not a terminal**. You type a
+message, the model replies inline, and the conversation history is saved with
+the project.
+
+- Uses the API providers you configure in **Settings → Connections**.
+- Streaming replies render as they arrive.
+- The chat history rides along with the project, so it's there after a
+  restart.
 
 ## druk
 
