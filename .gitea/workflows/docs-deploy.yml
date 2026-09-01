@@ -1,0 +1,98 @@
+name: docs-deploy
+
+# Build the Fumadocs site and publish it to hermes-box on every push to main.
+# Mirrors the manual ritual (scripts/deploy-hermes-box.sh): pnpm build →
+# ssh+tar build/client to /var/www/termsprawl-docs → update this repo's own
+# managed Caddy block → caddy validate + reload. The runner CT already holds
+# the deploy key (~/.ssh/hermes-box_ed25519 → root@178.104.6.193).
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: install dependencies
+        # allowBuilds (esbuild) is already set in pnpm-workspace.yaml
+        run: pnpm install --frozen-lockfile
+
+      - name: lint + typecheck
+        run: |
+          pnpm lint
+          pnpm types:check
+
+      - name: build
+        run: pnpm build
+
+      - name: deploy to hermes-box
+        env:
+          SSH_KEY: /home/runner/.ssh/hermes-box_ed25519
+        run: |
+          set -euo pipefail
+          test -f build/client/index.html
+          remote="root@178.104.6.193"
+          remote_root="/var/www/termsprawl-docs"
+          ssh -i "$SSH_KEY" -o BatchMode=yes -o StrictHostKeyChecking=no "$remote" \
+            "install -d -m 0755 '$remote_root'"
+          # Non-destructive stream (keeps stale hashed assets); index.html overwritten.
+          tar -C build/client -czf - . \
+            | ssh -i "$SSH_KEY" -o BatchMode=yes -o StrictHostKeyChecking=no "$remote" \
+                "tar -xzf - -C '$remote_root'"
+          # Update ONLY this repo's managed Caddy block (validate + reload with backup)
+          ssh -i "$SSH_KEY" -o BatchMode=yes -o StrictHostKeyChecking=no "$remote" \
+            "cat > /tmp/termsprawl-docs.caddy" < scripts/termsprawl-docs.Caddyfile
+          ssh -i "$SSH_KEY" -o BatchMode=yes -o StrictHostKeyChecking=no "$remote" \
+            "python3 - /tmp/termsprawl-docs.caddy" <<'PY'
+          from pathlib import Path
+          import re, shutil, subprocess, sys
+
+          fragment_path = Path(sys.argv[1])
+          caddyfile = Path('/etc/caddy/Caddyfile')
+          fragment = fragment_path.read_text()
+          original = caddyfile.read_text()
+          backup = Path('/etc/caddy/Caddyfile.bak.termsprawl-docs')
+          shutil.copy2(caddyfile, backup)
+
+          pattern = r'\n?# BEGIN managed termsprawl-docs\n.*?# END managed termsprawl-docs\n?'
+          updated, replacements = re.subn(pattern, '\n' + fragment + '\n', original, flags=re.DOTALL)
+          if replacements == 0:
+              updated = original.rstrip() + '\n\n' + fragment
+          elif replacements != 1:
+              raise SystemExit(f'Expected at most one managed block, found {replacements}')
+
+          try:
+              caddyfile.write_text(updated)
+              subprocess.run(['caddy', 'validate', '--config', str(caddyfile)], check=True)
+              subprocess.run(['caddy', 'reload', '--config', str(caddyfile)], check=True)
+          except Exception:
+              shutil.copy2(backup, caddyfile)
+              subprocess.run(['caddy', 'validate', '--config', str(caddyfile)], check=True)
+              subprocess.run(['caddy', 'reload', '--config', str(caddyfile)], check=True)
+              raise
+          finally:
+              fragment_path.unlink(missing_ok=True)
+          PY
+
+      - name: verify live
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://docs.termsprawl.com/)
+          echo "docs.termsprawl.com -> $code"
+          test "$code" = "200"
