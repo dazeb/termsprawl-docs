@@ -1,0 +1,77 @@
+---
+title: Node links
+description: Connect canvas nodes with links — write output to a file, inject context into a chat, or forward to an A2A peer — and run them on a schedule or by hand.
+---
+
+A **node link** is a persistent connection between two nodes on the canvas. It
+moves content from a **source** node to a **target** node in one of three
+behaviors:
+
+- **Write to file** — the source's content is appended to (or overwrites) a
+  file in the project.
+- **Inject context** — the source's content is pushed into a target node
+  (a chat conversation or a terminal) as context.
+- **Send to A2A peer** — the source's content is forwarded to an
+  [agent-to-agent peer](/docs/a2a) over the network.
+
+Links are drawn as an edge between the two nodes, with a small chip in the
+middle showing the behavior (`file`, `ctx`, or `a2a`). They are saved with the
+project and restored when you reopen it.
+
+## Create a link
+
+1. Select a node. Two small **link handles** appear: a source handle on the
+   right edge and a target handle on the left edge.
+2. **Drag from the source handle** of one node to the **target handle** of
+   another, and release.
+3. A link is created with the first behavior that makes sense for that pair of
+   node kinds (see below), and the edge appears between them.
+
+Only node combinations that have a defined behavior can be connected — the
+canvas blocks a drag that has no meaning. One link per ordered pair: connecting
+the same two nodes again resets that link's behavior instead of duplicating it.
+
+<Callout type="info" title="Which nodes can link">
+  Terminals (including agent terminals), sticky notes, editors, and chat nodes
+  can participate. Whether a given pair connects depends on the behavior —
+  for example only terminals and chat nodes can be the source of an A2A send,
+  and only a chat or terminal can receive an injected context.
+</Callout>
+
+## Configure a link
+
+**Click the edge** to open the link inspector. From there you can:
+
+- **Change the behavior** — choose Write to file, Inject context, or Send to
+  A2A peer (only behaviors valid for this node pair are offered).
+- **Configure the behavior**:
+  - *Write to file* — the file path (relative to the project), whether to
+    overwrite or append, and whether to write a small header describing the
+    source.
+  - *Inject context* — whether to wrap the content with the source's title,
+    and whether to paste a pointer line into a terminal target.
+  - *Send to A2A peer* — whether to send the source's last output or a full
+    capture, and whether replies should be delivered back to the source node.
+- **Run it** — a **Run now** button executes the link once, immediately.
+- **Run it automatically** — tick **run automatically when content changes**
+  and the link fires by itself shortly after the source node's content goes
+  quiet (so a terminal that just printed a result updates its linked file or
+  peer without you touching anything). Links you create by dragging start with
+  this **off** — automatic only happens when you turn it on.
+- **Delete it** — the inspector's delete button (with a confirm step), or
+  select the edge and press **Delete** / **Backspace**.
+- **Check the last run** — the inspector shows whether the most recent run
+  succeeded and what it did.
+
+Press **Escape** or click empty canvas to close the inspector.
+
+<Callout type="warn" title="Deleting a node deletes its links">
+  When you delete a node, every link touching it is removed too — the same
+  cascade as deleting a terminal's session. Delete links you still want first.
+</Callout>
+
+## What runs where
+
+Links run on your machine through the app's link engine. Each run is isolated:
+a failing link (a bad file path, an unreachable peer) reports the error in the
+inspector and never takes the app down.

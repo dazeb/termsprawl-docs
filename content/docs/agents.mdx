@@ -55,14 +55,26 @@ Claude Code nodes support conversation continuity:
 ## Context links
 
 You can link agent nodes together so they can read each other's transcripts on
-demand. Right-click an agent node, choose **link to another agent ▾**, and pick
+demand. Right-click an agent node, choose **link to another agent ▸**, and pick
 a peer. This lets agents share context without you copying text between them.
+
+## Connect agents with node links and A2A
+
+Two newer connection types build on the same canvas:
+
+- **Node links** — drag between an agent terminal and another node to route
+  its output: write it to a file, inject it into a chat or terminal, or send
+  it to a peer. See [Node links](/docs/node-links).
+- **A2A send to peer** — right-click an agent node and pick **A2A send to
+  peer ▸** to forward its output to an agent on another machine. See
+  [Agent-to-agent](/docs/a2a).
 
 ## Managed accounts
 
-Manage per-agent accounts in Settings. This is where you set up a Claude
-account, add an API provider, or add a peer endpoint — without pasting secrets
-into a shell.
+Manage per-agent accounts in **Settings → Agents**. This is where you set up a
+Claude account, an API provider, or a peer endpoint — without pasting secrets
+into a shell. API providers and A2A peers live under **Settings →
+Connections**.
 
 <Callout type="warn" title="Secrets stay in Settings">
   Configure provider keys and accounts in the Settings panel. Don't export them

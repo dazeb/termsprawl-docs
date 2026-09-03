@@ -2,14 +2,21 @@
   "title": "Docs",
   "pages": [
     "index",
+    "---Start---",
     "getting-started",
+    "projects",
+    "---The canvas---",
     "canvas",
     "terminals",
-    "projects",
     "nodes",
+    "node-links",
+    "---Agents---",
     "agents",
+    "a2a",
+    "---Git & cloud---",
     "source-control",
     "cloud",
+    "---Reference---",
     "shortcuts",
     "faq"
   ]

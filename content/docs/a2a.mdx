@@ -1,0 +1,61 @@
+---
+title: Agent-to-agent (A2A)
+description: Connect termsprawl to other machines and agents over the Google A2A protocol — configure peers, send agent output to them, and expose your agents to peers.
+---
+
+**Agent-to-agent (A2A)** lets termsprawl talk to agents running elsewhere —
+another machine on your network, a teammate's agent, or a service that speaks
+the [Google A2A protocol](https://a2a-protocol.org) (JSON-RPC over HTTP).
+A2A is how an agent in one termsprawl sends its work to an agent in another.
+
+Two directions are involved:
+
+- **Sending** — your agent forwards its output to a *peer* you configured.
+- **Receiving** — peers can see and task your live agents, if you turn that on.
+
+## Configure a peer
+
+1. Open **Settings → Connections → A2A peers**.
+2. **Add a peer** with a label, the peer's A2A endpoint URL, and an optional
+   bearer token (if the peer gates message sending).
+3. Use the **test** button next to a peer to discover the peer's agent card
+   and confirm the connection works.
+4. **Remove** a peer when you no longer need it.
+
+<Callout type="info" title="Peer tokens stay secret">
+  A peer token is stored in your settings, never logged. For an extra layer,
+  an environment variable per peer wins over the stored token:
+  `TERMSPRAWL_A2A_PEER_TOKEN_<ID>` (the peer id uppercased, non-alphanumerics
+  as underscores).
+</Callout>
+
+## Send an agent's output to a peer
+
+1. Right-click an **agent node** on the canvas.
+2. Choose **A2A send to peer ▸**.
+3. Pick the peer from the submenu.
+
+The agent's latest output is forwarded to the peer, and the context menu shows
+the result (`✓` / `✗` with a short summary). If you have not added any peers
+yet, the submenu says so and points you at Settings.
+
+A2A is also available as a **node link** behavior: connect an agent terminal to
+a compatible node with a link and choose *Send to A2A peer* to forward content
+automatically or on demand — see [Node links](/docs/node-links).
+
+## Receive tasks from peers
+
+Exposing your agents is **off by default**. When you enable it, termsprawl
+lists your live agent terminals at a **localhost-only** A2A endpoint, and
+peers on the machine can send tasks to them over the Google A2A protocol.
+
+To turn it on: open **Settings → General → Expose agent nodes to A2A peers**.
+The endpoint's access token is written to `a2a-agent.json` in termsprawl's
+user-data folder.
+
+<Callout type="warn" title="Receiving is an opt-in local endpoint">
+  Nothing listens until you flip the toggle, and even then the endpoint binds
+  to localhost only — a peer elsewhere on your network cannot reach it
+  directly. Exposing to remote machines is a deliberate network-setup
+  decision beyond the app's default.
+</Callout>

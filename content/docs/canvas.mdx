@@ -53,16 +53,20 @@ it doesn't fight your shell prompt.
 ## Organize windows
 
 The **organize** button in the toolbar (next to the settings cog) tidies the
-whole canvas in one click. It opens a small menu with three modes:
+canvas with one click. It has no dropdown — each click advances to the next
+layout, cycling in order:
 
-- **Cascade** — every window stacks on one diagonal, so all the title bars
-  stay reachable. Sticky notes align in a row along the top.
-- **Flat** — all windows sit side by side in a row (it wraps to a new row when
-  it grows past the canvas width); stickies get their own row above.
-- **Restore** — puts everything back how it was before you started
-  organizing. The original arrangement is remembered across layouts, so
-  cascade → flat → restore lands you back where you began. After a restore,
-  the next organize starts a fresh cycle.
+1. **Cascade** — every window stacks on one diagonal, so all the title bars
+   stay reachable. Sticky notes align in a row along the top.
+2. **Flat** — all windows arrange side by side inside the area you are
+   currently looking at, starting at the top-left of your view; when they
+   would run past the edge of the view they wrap to a new row below, and the
+   canvas zooms out so the whole layout is visible. Stickies get their own row
+   above the windows.
+3. **Restore** — puts everything back how it was before you started
+   organizing. The original arrangement is remembered across layouts, so
+   cascade → flat → restore lands you back where you began. After a restore,
+   the next organize starts a fresh cycle.
 
 <Callout type="info" title="Organizing is undoable and persisted">
   Each organize is a single undo step (**Ctrl+Z** takes it back), the new
@@ -70,14 +74,27 @@ whole canvas in one click. It opens a small menu with three modes:
   their children move with them.
 </Callout>
 
+## Link nodes together
+
+Nodes can be connected with **links** — edges that pass content between a
+source node and a target node (write a terminal's output to a file, feed an
+editor's content into a chat, forward an agent's output to another machine).
+When you select a node, small link handles appear on its sides: drag from the
+right edge of one node to the left edge of another to connect them, then click
+the edge to configure what it does. Links are saved with the project. See
+[Node links](/docs/node-links).
+
 ## The right-click menu
 
 Right-click on the canvas or a node for the context menu. It offers:
 
-- **Group selection** — frame selected nodes into a group.
+- **Group selection** — frame selected nodes into a group (or **Ungroup** on
+  a group frame).
 - **Close** — close the node under the cursor.
+- **A2A send to peer ▸** — agent nodes only; forward the agent's output to a
+  peer machine. See [Agent-to-agent](/docs/a2a).
 - **Branch session** / **Resume session in new node** / **link to another
-  agent** — for Claude agent nodes. See [Agents](/docs/agents).
+  agent ▸** — Claude agent nodes. See [Agents](/docs/agents).
 - **New terminal** — add a terminal to the active project.
 - **New sticky note** — add a note.
 - **New diff** — add a diff view.
@@ -85,7 +102,7 @@ Right-click on the canvas or a node for the context menu. It offers:
 - **New browser** — add an embedded browser node.
 - **New chat** — add a chat node (an AI conversation panel, not a terminal).
 - **Open druk** — open the druk TUI editor in the project folder.
-- **Open agent ▾** — choose an agent (Claude, Codex, Antigravity, Grok) to spawn.
+- **Open agent ▸** — choose an agent (Claude, Codex, Antigravity, Grok) to spawn.
 
 ## The project sidebar
 
