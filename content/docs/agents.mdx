@@ -12,15 +12,16 @@ transcript and status shown on the canvas.
 termsprawl ships presets for four CLIs, plus a custom template:
 
 - **Claude Code** — full support: hooks/status, resume, subagents, recurring, branch, context links, usage, permission mode.
-- **Codex CLI** — resume, subagents, and permission mode (fewer hook integrations).
+- **Codex CLI** — hooks/status (RUNNING / NEEDS YOU), resume, subagents, permission mode.
 - **Antigravity** (the Gemini CLI's successor — the preset is still `gemini` so existing nodes keep working) — resume, subagents, usage, permission mode.
 - **Grok** — resume, subagents, recurring, branch, usage, permission mode.
 - **Custom agent** — a template you configure. It is not enabled by default.
 
 <Callout type="info" title="Status badges are honest">
-  Live status badges (RUNNING / NEEDS YOU) are driven by the agent's own hook
-  system, which today only Claude Code provides. The other presets launch and
-  run normally — they just don't claim badge support they can't deliver.
+  Live status badges (RUNNING / NEEDS YOU) are driven by each agent's own hook
+  system. Claude Code and Codex CLI drive badges today; the other presets
+  launch and run normally — they just don't claim badge support they can't
+  deliver.
 </Callout>
 
 <Callout type="info" title="You need the CLI installed">
