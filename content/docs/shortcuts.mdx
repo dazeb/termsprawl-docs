@@ -11,8 +11,14 @@ right-click menu and the toolbar.
 
 | Keys | Action |
 | --- | --- |
+| `Tab` / `Shift+Tab` | Move node selection to the next / previous node (reading order: top-to-bottom, left-to-right) |
+| `Arrow keys` | Nudge the selected node by 1px (hold `Shift` for 10px) |
+| `Arrow keys` (nothing selected) | Pan the canvas |
 | `Ctrl+Z` | Undo the last layout change |
 | `Ctrl+Shift+Z` | Redo |
+
+Keyboard nav skips terminals and inputs — while you're typing in a shell, the
+keys belong to it, not the canvas.
 
 Undo/redo track the layout and pause while you type in an input or terminal.
 
