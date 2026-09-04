@@ -1,0 +1,111 @@
+---
+title: Relay & remote terminals
+description: Pair two termsprawl instances over an end-to-end-encrypted relay, then open the other machine's live terminals as nodes on your canvas.
+---
+
+**Relay** pairs two termsprawl instances over an end-to-end-encrypted
+tunnel. Once a pair is trusted, the second instance can open the host's live
+terminals and work in them — the shell runs on the host, you drive it from
+your own canvas.
+
+## How it works
+
+Two instances connect through a relay service. The relay is a dumb router:
+it carries only ciphertext and never learns what you type or what the
+terminal prints.
+
+- Traffic is sealed with **AES-256-GCM** under a key derived **per-pair**
+  via **X25519** + **HKDF-SHA256**.
+- The relay never holds keys and never parses envelope contents — it routes
+  frames opaquely by ID.
+- Trust is between the two instances, not between you and the relay. You
+  verify the peer's key fingerprint out-of-band once, and the app remembers it.
+
+## Set up a relay connection
+
+Open **Settings → Relay** and fill in three fields:
+
+- **Relay URL** — the `wss://` address of a relay service.
+- **Role** — **host** or **client**.
+- **Invite code** — for the client role (see below).
+
+Nothing dials out until you press **Connect**.
+
+## Host flow
+
+1. Set **Role** to **host** and press **Connect**. The host authenticates
+   with a GitHub token (device flow — no password typed into termsprawl; in
+   a packaged app the token comes from the `TERMSPRAWL_RELAY_GITHUB_TOKEN`
+   environment variable).
+2. Once paired, **Generate invite** mints a single-use **8-character** code
+   that expires in **7 days**. Use **Copy** to grab it.
+3. Hand the code to the peer **out-of-band** — over a channel you trust, not
+   through the relay.
+
+## Client flow
+
+1. Set **Role** to **client**.
+2. Paste the invite code the host shared, then press **Connect**.
+3. The host must be online at the time.
+
+The invite is single-use and expires in 7 days, so it's safe to share — a
+code that's used can't be reused.
+
+## Trust & fingerprints
+
+On the first successful pairing, **both** sides see a confirm card with the
+peer's key fingerprint — 8 groups of 2 hex bytes — and **Trust** /
+**Disconnect** buttons. Trust persists per peer fingerprint, so you only
+verify a machine once.
+
+<Callout type="warn" title="A changed fingerprint is a hard warning">
+  If a later connection presents a *different* fingerprint than the one you
+  trusted, the app shows a hard warning and requires an explicit decision —
+  it never auto-trusts. A changed fingerprint means the peer's key changed and
+  the connection is not the machine you verified.
+</Callout>
+
+## Remote terminals
+
+Once paired and trusted, a client can open the host's live terminals.
+**Settings → Relay** lists the host's terminals, and each opens as a node on
+your canvas.
+
+- The terminal **runs on the host** — the machine you're on is just the
+  viewer. Streamed output comes back over the tunnel, and your keystrokes are
+  sent to the host's shell.
+- A remote terminal node shows a **remote** indicator so you can tell it
+  apart from a local one at a glance.
+- If the tunnel drops, the node shows a **waiting** state until it reconnects.
+
+<Callout type="info" title="The local machine never owns a remote session">
+  A remote terminal node never creates a tmux session on *your* machine — the
+  session stays on the host, where it actually runs.
+</Callout>
+
+## Self-host the relay
+
+The relay is a single zero-dependency Node service — the only dependency is
+`ws`; the rest is Node builtins as plain ESM. Host it anywhere you can reach
+both instances. Quick start:
+
+```sh
+pnpm install --dir relay
+RELAY_DATA_DIR=./data \
+GITHUB_CLIENT_ID=... GITHUB_CLIENT_SECRET=... \
+ADMIN_TOKEN=<random> \
+node relay/src/index.mjs        # binds 127.0.0.1:8788
+```
+
+- `RELAY_DEV_AUTH=1` accepts unauthenticated dev hosts — and refuses to start
+  when `NODE_ENV=production`, so dev identities can never be mistaken for
+  real ones.
+- **Admin API** (Bearer `ADMIN_TOKEN`): `GET /healthz`, `GET /admin/stats`,
+  `POST /admin/invites/:code/revoke`, `DELETE /admin/users/:login`.
+- **Invites**: 8-character, 7-day TTL, single-use, max 5 active per host;
+  expired/revoked/exhausted codes are rejected with typed errors.
+
+<Callout type="info" title="Upgrade together">
+  The relay service and the app ship together — keep them on the same version.
+  The relay is self-hosted by users today, not a hosted termsprawl product.
+</Callout>
