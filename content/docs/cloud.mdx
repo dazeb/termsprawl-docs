@@ -97,6 +97,17 @@ Settings shows the space rows for the signed-in user:
 - **Deleting your account** stops the space and removes its data after a
   7-day grace window.
 
+### Security & isolation
+
+Each hosted space runs in its **own isolated container network** — no two
+spaces share a network, and the canvas server's boot credential is only ever
+handed to your own session (never readable from the app port). Cloud API
+routes that hold your data (backups, sessions, sync, space snapshots) are
+scoped to your account, carry `no-store` caching headers, and are verified by
+a two-account cross-tenant regression suite. Your backups and snapshots are
+encrypted at rest; the sync token a space uses to push snapshots expires
+after 30 days and is re-minted on every container start.
+
 <Callout type="tip" title="Why this matters">
   Closed apps lose nothing because your sessions live in tmux. The cloud layer
   is the next step: move to a new machine, sign in, and your whole workspace —
