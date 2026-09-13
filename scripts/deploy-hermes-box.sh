@@ -23,7 +23,7 @@ ssh -i "$ssh_key" -o BatchMode=yes ${ssh_extra} "$remote" "install -d -m 0755 '$
 
 # Non-destructive stream (keeps stale hashed assets); index.html overwritten.
 tar -C "$repo_root/build/client" -czf - . \
-  | ssh -i "$ssh_key" -o BatchMode=yes ${ssh_extra} "$remote" "tar -xzf - -C '$remote_root'"
+  | ssh -i "$ssh_key" -o BatchMode=yes ${ssh_extra} "$remote" "tar -xzf - -C '$remote_root' && chmod -R a+rX '$remote_root'"
 
 remote_fragment=$(mktemp)
 trap 'rm -f "$remote_fragment"' EXIT
