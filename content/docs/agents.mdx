@@ -1,6 +1,6 @@
 ---
 title: Agents
-description: Run Claude, Codex, Gemini, or Grok as canvas nodes — spawn, status badges, context links, accounts, and permission modes.
+description: Run Claude, Codex, Antigravity, Grok, or OpenClaude as canvas nodes — spawn, status badges, context links, accounts, and permission modes.
 ---
 
 An **agent node** is a terminal node preset that launches an AI coding agent CLI
@@ -9,12 +9,13 @@ transcript and status shown on the canvas.
 
 ## Supported agents
 
-termsprawl ships presets for four CLIs, plus a custom template:
+termsprawl ships presets for five CLIs, plus a custom template:
 
 - **Claude Code** — full support: hooks/status, resume, subagents, recurring, branch, context links, usage, permission mode.
 - **Codex CLI** — hooks/status (RUNNING / NEEDS YOU), resume, subagents, permission mode.
-- **Antigravity** (the Gemini CLI's successor — the preset is still `gemini` so existing nodes keep working) — resume, subagents, usage, permission mode.
+- **Antigravity** (the Gemini CLI's successor — the preset is still `gemini` so existing nodes keep working; the app resolves it to the `agy` binary on modern installs) — resume, subagents, usage, permission mode.
 - **Grok** — resume, subagents, recurring, branch, usage, permission mode.
+- **OpenClaude** — a Claude-Code-compatible TUI for any OpenAI-compatible endpoint. Point it at your **local models** (Ollama, llama.cpp, LM Studio, …) or any provider. No badge support yet.
 - **Custom agent** — a template you configure. It is not enabled by default.
 
 <Callout type="info" title="Status badges are honest">
@@ -25,16 +26,18 @@ termsprawl ships presets for four CLIs, plus a custom template:
 </Callout>
 
 <Callout type="info" title="You need the CLI installed">
-  termsprawl launches the agent binary from your PATH. Install `claude`,
-  `codex`, `gemini`, or `grok` yourself first; the agent node just runs it in
-  your project.
+  termsprawl launches the agent binary from your PATH (GUI launches also check
+  `~/.local/bin` and `~/bin`; Antigravity resolves to `agy`). Install `claude`,
+  `codex`, `agy`, `grok`, or `openclaude` yourself first; the agent node just
+  runs it in your project. When the binary is missing, the node shows a notice
+  naming it instead of closing silently.
 </Callout>
 
 ## Spawn an agent
 
 1. Right-click on the canvas.
 2. Choose **Open agent ▾**.
-3. Pick an agent (Claude, Codex, Gemini, Grok).
+3. Pick an agent (Claude, Codex, Antigravity, Grok, OpenClaude).
 
 A node appears, running the agent CLI in the project folder.
 
