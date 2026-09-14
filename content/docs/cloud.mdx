@@ -88,9 +88,10 @@ Settings shows the space rows for the signed-in user:
 
 ### Spaces lifecycle
 
-- **Stop** — the space pauses (no resource use); your canvas is kept, and
-  reopening it brings everything back. The dashboard's SpaceCard has a
-  confirm-gated Stop button.
+- **Stop** — the space pauses (no resource use); your canvas is kept. The
+  dashboard's SpaceCard has a confirm-gated Stop button. Stop is deliberate:
+  the space stays stopped until you press **Resume**, so an old browser tab or
+  bookmark can't quietly start it again.
 - **Idle spaces stop themselves** — a space nobody touches for 30 minutes is
   stopped automatically; opening it again wakes it (takes a few seconds) with
   your canvas intact.
