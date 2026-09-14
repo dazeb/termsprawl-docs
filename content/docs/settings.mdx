@@ -1,133 +1,150 @@
 ---
 title: Settings
-description: What each page in the settings panel controls, and which of them write to disk.
+description: Every page of the settings panel — basics, agent capabilities, and your data.
 ---
 
-Open settings from the gear in the canvas toolbar (or the account row at the
-bottom left). The panel has three groups, and one rule runs through all of it:
-**it reports what the agent CLIs will actually do, and only writes where the CLI
-has no other way to know.**
+# Settings
 
-Everything is stored in `settings.json` in the app's config directory —
-`~/.config/termsprawl/` on Linux, or the app's user-data folder for a packaged
-build.
+The **cog** in the toolbar (top-right) opens Settings as a full-width sheet over
+the canvas — there's no dropdown menu behind it, and nothing to save: each
+change applies as you make it. Escape, the **×**, or a click on the backdrop
+closes the sheet. Everything lands in `settings.json` in the app's config
+directory.
 
-## Basics
+The sidebar groups the pages:
 
-### General
+- **Basics** — General, Appearance, Model settings, Browser.
+- **Agent capabilities** — Skills, Hooks, Commands, MCP Servers, Agent accounts,
+  A2A peers.
+- **Data and statistics** — Usage, Cloud & backup, Connections, Updates.
 
-- **Enter behavior while busy** — what Enter does in a chat node while a reply
-  is streaming: queue the message, send it, or ask. Shift+Enter always breaks
-  the line.
-- **Terminal font** — the font family for new terminals. Empty means the
-  built-in default.
-- **Inherited terminal profile** — the terminal profile termsprawl asks for when
-  it launches a shell, exported as `TERMSPRAWL_TERMINAL_PROFILE` so your own
-  shell startup can act on it.
-- **HTTP proxy** — routes terminal and agent egress through a proxy. The value
-  is exported as `HTTP_PROXY`, `HTTPS_PROXY`, `http_proxy` and `https_proxy` in
-  every terminal and agent process termsprawl spawns. Blank means direct.
-- **Invert mousewheel zoom** — flips the scroll direction on the canvas.
-- **Show the welcome guide again** — replays the three-step first-run guide the
-  next time the canvas is empty.
+Pages that don't apply to the running edition are hidden rather than shown
+empty. In the Server Edition the desktop-only pages (Browser, Agent accounts,
+A2A peers, Connections, Updates) aren't there, and the capability pages say why
+they can't read anything: a container has no host config tree to discover in.
 
-### Appearance
+## General
 
-The theme: **light**, **dark**, or **system** (follow the OS). The canvas keeps
-its monochrome surfaces and lime accent in every theme; lime is a signal, never
+**Interaction**
+
+| Setting | What it does |
+| --- | --- |
+| Enter behavior while busy | In chat nodes `Enter` sends; while a session is busy it queues, sends straight away, or prompts. `Shift+Enter` always breaks the line. |
+| Terminal font | The font family terminal nodes use. Empty means the built-in default. |
+| Inherited terminal profile | The profile name exposed to spawned terminal processes as `TERMSPRAWL_TERMINAL_PROFILE`, so your own shell startup can act on it. |
+| HTTP proxy | Inherited by terminal and agent processes as `HTTP_PROXY`, `HTTPS_PROXY`, `http_proxy` and `https_proxy` when set. Blank means direct. |
+| Invert mousewheel zoom | Off (default): scroll up zooms in. On: scroll up zooms out. |
+
+**First run** — reset the welcome guide so the three-step welcome (create a
+project, spawn a terminal, arrange) replays the next time the canvas is empty.
+
+## Appearance
+
+**Theme** — Light, Dark, or System (follow the OS). The canvas keeps its
+monochrome surfaces and lime accent in every theme; lime is a signal, never
 decoration.
 
-### Model settings
+## Model settings
 
-Model providers for chat nodes: a name, a base URL, and per-provider API keys
-stored on this machine only. Keys are never written into project files, and a
-`TERMSPRAWL_PROVIDER_KEY_<ID>` environment variable overrides a stored key.
+**Providers** manages your custom model providers; once configured they can be
+chosen in chat nodes. **Defaults and keys** holds the default chat model and the
+keys it uses — stored on this machine only, never in project files, and
+overridable with a `TERMSPRAWL_PROVIDER_KEY_<ID>` environment variable.
 
-### Browser
+## Browser
 
-- **Home page** — the URL a new browser node or tab opens. Point it at your own
-  SearXNG instance for private search.
-- **Allow agents to control browser nodes** — off by default. When on, an
-  external agent can open and drive browser nodes over a localhost-only CDP
-  endpoint.
+**Start page** — where an embedded browser node first goes. **Agent control** —
+whether agents may drive browser nodes. See [Nodes](/docs/nodes) for the browser
+node itself.
 
-## Agent capabilities
+## Skills
 
-### Skills
-
-The skills the agent CLIs on this machine will load, read from their own skills
+The skills the agent CLIs on this machine will load, read from their own
 directories (`~/.claude/skills`, `~/.codex/skills`). Each row shows which agent
-it belongs to and whether it is enabled.
+it belongs to and whether it's enabled; **All agents** / per-agent tabs and the
+search box narrow a long list.
 
 **Disabling is real, and reversible.** The toggle moves the skill folder into a
-sibling `skills-disabled/` directory that the CLI never scans — nothing is
-deleted, and enabling moves it straight back. This is the one place the settings
-panel writes to an agent's config tree, and it does so by renaming a folder.
+sibling `skills-disabled/` directory the CLI never scans. Nothing is deleted,
+and enabling moves it straight back. This is the one place Settings writes into
+an agent's config tree, and it does it by renaming a folder.
 
-### Hooks
+## Hooks
 
-Hooks are how agent CLIs tell termsprawl what a session is doing, which is what
-drives the RUNNING / NEEDS YOU badges on agent nodes.
+Hooks are how the agent CLIs tell termsprawl what a session is doing, which is
+what drives the RUNNING / NEEDS YOU badges on agent nodes.
 
 - **Managed by termsprawl** — the hooks our installer wrote into the CLI's own
-  config. **Repair hooks** re-runs that installer for the agents in scope; it is
+  config. **Repair hooks** re-runs that installer for the agents in scope; it's
   idempotent, so a second press changes nothing.
-- **Not managed by termsprawl** — hook entries another tool installed. They are
-  listed for transparency and never touched.
+- **Not managed by termsprawl** — entries another tool installed. They're listed
+  for transparency and never touched.
 
-### Commands
+## Commands
 
 The slash commands a chat node intercepts before sending a message (`/clear`,
-`/model`, `/system`, `/cost`). The parser is the source of truth: if a command
-is listed here, the chat node will act on it.
+`/model`, `/system`, `/cost`). The parser is the source of truth: the command
+parser is what decides, which is why this page is read-only.
 
-### MCP Servers
+## MCP Servers
 
 The MCP servers your agent CLIs will start, read from their own config files
 (`~/.claude.json`, `~/.codex/config.toml`), with the command or URL each one
-launches. This page is **read-only on purpose**: the CLI is what launches the
-server, so editing it here could put the panel out of sync with what actually
-runs. Add or change servers in the CLI's config file.
+launches and whether it runs over stdio or HTTP.
 
-### Agent accounts
+This page is **read-only on purpose**: the CLI is what launches the server, so
+rewriting its config from here could put the panel out of sync with what
+actually runs. Add or change servers in the CLI's own config file and press
+**Refresh**.
 
-See [Agents](/docs/agents) — managed logins per CLI, and the permission mode each
-account runs with.
+## Agent accounts
 
-### A2A peers
+The agent registry and the managed logins for the agent CLIs, with the
+permission mode each account runs under. **login** opens a terminal for that
+CLI's sign-in flow; **delete** forgets the account. See
+[Agents](/docs/agents).
 
-See [Agent-to-agent](/docs/a2a) — the peer list, and whether your own nodes are
-exposed as A2A agents.
+## A2A peers
 
-## Data and statistics
+Agent-to-agent endpoints: which peers you trust, and whether your own nodes are
+exposed to them. **test** fetches the peer's agent card; a peer whose key has
+changed shows as untrusted until you confirm it. See [A2A peers](/docs/a2a).
 
-### Usage
+## Usage
 
 Tokens and cost for your chat nodes, totalled from what the workspace already
-saves: every assistant reply records its token counts and timestamp, so this
-page needs no collection pass of its own and no data leaves the machine.
+saves: every assistant reply records its token counts and a timestamp, so this
+page needs no collection pass of its own and nothing leaves the machine.
 
-- The metric strip totals tokens, the busiest day, the longest session, and the
-  current and longest streaks.
+- The metric strip shows total tokens, the busiest day, the longest session, and
+  the current and longest streaks.
 - **Token activity** is one square per day.
 - **Daily trend** switches between the last 7 and last 30 days.
-- **Model usage** breaks the totals down per provider and model, with cost from
-  the built-in price table (or your own overrides).
+- **Model usage** breaks the totals down per provider and model, priced with the
+  built-in table (or your own overrides).
 
-Conversations that never reported tokens — an agent node in a terminal, for
-instance — do not appear here.
+Conversations that never reported tokens — an agent running in a terminal node,
+for instance — don't appear here.
 
-### Cloud & backup
+## Cloud & backup
 
-See [Cloud backup](/docs/cloud) — account, encrypted backups, and the hosted
-canvas space.
+Your account, encrypted workspace backups, and your hosted canvas space. See
+[Cloud](/docs/cloud).
 
-### Connections
+## Connections
 
-See [Relay](/docs/relay) for remote terminals, and [Agents](/docs/agents) for the
-Telegram bot settings that live alongside it.
+The Telegram bot and the relay service — how this machine talks to your phone
+and to other machines. See [Relay](/docs/relay).
 
-### Updates
+<Callout type="warn" title="Credentials live in Settings">
+  Provider keys, peer tokens and account logins are stored by the app and edited
+  here. Don't export them into shells or project files.
+</Callout>
 
-Auto-download behaviour for releases, plus the changelog for the running build.
-Unpackaged dev builds show why the updater is inactive instead of a dead toggle.
+## Updates
+
+**Release** shows the auto-download preference. Off (default), you get a toast
+when a newer GitHub release exists and you choose when to download; on, the
+AppImage or `.deb` downloads in the background and the toast then asks you to
+restart. An unpackaged (dev) build says the updater is inactive instead of
+offering a control that does nothing.
