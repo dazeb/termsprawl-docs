@@ -1,0 +1,102 @@
+---
+title: Settings
+description: Every page of the settings panel — basics, agent capabilities, and your data.
+---
+
+# Settings
+
+The **cog** in the toolbar (top-right) opens Settings as a full-width sheet over
+the canvas — there's no dropdown menu behind it, and nothing to save: each
+change applies as you make it. Escape, the **×**, or a click on the backdrop
+closes the sheet.
+
+The sidebar groups the pages:
+
+- **Basics** — General, Appearance, Model settings, Browser.
+- **Agent capabilities** — Skills, Hooks, Commands, Agent accounts, A2A peers.
+- **Data and statistics** — Usage, Cloud & backup, Connections, Updates.
+
+Pages that don't apply to the running edition are hidden rather than shown
+empty. In the Server Edition that's General, Appearance, Model settings, Skills,
+Hooks, Commands, Usage and Cloud & backup — the desktop-only pages (Browser,
+Agent accounts, A2A peers, Connections, Updates) aren't there.
+
+## General
+
+**Interaction**
+
+| Setting | What it does |
+| --- | --- |
+| Enter behavior while busy | In chat nodes `Enter` sends; while a session is busy it queues, sends straight away, or prompts. `Shift+Enter` always breaks the line. |
+| Terminal font | The font family terminal nodes use. |
+| Inherited terminal profile | The profile name exposed to spawned terminal processes. |
+| HTTP proxy | Inherited by terminal and agent processes when set. |
+| Invert mousewheel zoom | Off (default): scroll up zooms in. On: scroll up zooms out. |
+
+**First run** — reset the welcome guide so the three-step welcome (create a
+project, spawn a terminal, arrange) replays the next time the canvas is empty.
+
+## Appearance
+
+**Theme** — Light, Dark, or System (follow the OS).
+
+## Model settings
+
+**Providers** manages your custom model providers; once configured they can be
+chosen in chat nodes. **Defaults and keys** holds the default chat model and the
+keys it uses.
+
+## Browser
+
+**Start page** — where an embedded browser node first goes. **Agent control** —
+whether agents may drive browser nodes. See [Nodes](/docs/nodes) for the browser
+node itself.
+
+## Skills, Hooks, Commands
+
+Read-only inventories of what this machine offers your agents: the installed
+skills, the configured hooks, and the chat commands you can type. **Refresh**
+re-reads them; an empty page means "none found", not "still loading".
+
+## Agent accounts
+
+The agent registry and the managed logins for the agent CLIs, with the
+permission mode each account runs under. **login** opens a terminal for that
+CLI's sign-in flow; **delete** forgets the account. See
+[Agents](/docs/agents).
+
+## A2A peers
+
+Agent-to-agent endpoints: which peers you trust, and whether your own nodes are
+exposed to them. **test** fetches the peer's agent card; a peer whose key has
+changed shows as untrusted until you confirm it. See [A2A peers](/docs/a2a).
+
+## Usage
+
+Token and cost usage collected from agent sessions: session count, input and
+output tokens, total cost, the longest session, a daily breakdown, and a
+per-model breakdown. When this build can't collect usage, the page says why
+instead of showing zeros. **Refresh** re-reads it.
+
+## Cloud & backup
+
+Your account, encrypted workspace backups, and your hosted canvas space. See
+[Cloud](/docs/cloud).
+
+## Connections
+
+The Telegram bot and the relay service — how this machine talks to your phone
+and to other machines. See [Relay](/docs/relay).
+
+<Callout type="warn" title="Credentials live in Settings">
+  Provider keys, peer tokens and account logins are stored by the app and edited
+  here. Don't export them into shells or project files.
+</Callout>
+
+## Updates
+
+**Release** shows the auto-download preference. Off (default), you get a toast
+when a newer GitHub release exists and you choose when to download; on, the
+AppImage or `.deb` downloads in the background and the toast then asks you to
+restart. An unpackaged (dev) build says the updater is inactive instead of
+offering a control that does nothing.
