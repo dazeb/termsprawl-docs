@@ -14,8 +14,8 @@ directory.
 The sidebar groups the pages:
 
 - **Basics** — General, Appearance, Model settings, Browser.
-- **Agent capabilities** — Skills, Hooks, Commands, MCP Servers, Agent accounts,
-  A2A peers.
+- **Agent capabilities** — Skills, Hooks, Commands, MCP Servers, Subagents,
+  Plugins, Agent accounts, A2A peers.
 - **Data and statistics** — Usage, Cloud & backup, Connections, Updates.
 
 Pages that don't apply to the running edition are hidden rather than shown
@@ -96,6 +96,31 @@ This page is **read-only on purpose**: the CLI is what launches the server, so
 rewriting its config from here could put the panel out of sync with what
 actually runs. Add or change servers in the CLI's own config file and press
 **Refresh**.
+
+## Subagents
+
+The reusable subagent definitions the CLIs on this machine will load, read from
+their own directories (`~/.claude/agents/*.md`, `~/.codex/agents/*.toml`). Each
+row shows what the definition declares: how many tools it may use ("All tools"
+when the file doesn't restrict them), and its permission or sandbox mode plus
+any MCP servers it brings.
+
+Read-only: the model a subagent runs on and the tools it may use belong to the
+CLI that owns the file, so the page reports them instead of offering a picker
+that wouldn't reach the CLI.
+
+## Plugins
+
+The plugin bundles cached by the agent CLIs — Codex from
+`~/.codex/plugins/cache/<marketplace>/<plugin>/<version>`, Claude Code from the
+same shape under `~/.claude/plugins` — grouped by marketplace, with the version
+and how many skills and agents each bundle ships.
+
+**Installed** means cached; the toggle is the CLI's own `enabled` flag. Turning
+one on writes `enabled = true` for that plugin's table in the CLI's config
+(`~/.codex/config.toml`), and turning it off writes `false` — one key, nothing
+else in that file is touched. A plugin that is cached but never enabled shows as
+off, which is what the CLI does with it.
 
 ## Agent accounts
 
