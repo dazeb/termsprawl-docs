@@ -53,8 +53,11 @@ the same two nodes again resets that link's behavior instead of duplicating it.
     source.
   - *Inject context* — whether to wrap the content with the source's title,
     and whether to paste a pointer line into a terminal target.
-  - *Send to A2A peer* — whether to send the source's last output or a full
-    capture, and whether replies should be delivered back to the source node.
+  - *Send to A2A peer* — for a chat source, choose the latest nonblank assistant
+    response or the full conversation. Terminal sources send a bounded capture
+    of the pane, including recent scrollback; this is not unlimited history or
+    a reliably isolated agent response. You can also choose whether replies
+    should be delivered back to the source node.
 - **Run it** — a **Run now** button executes the link once, immediately.
 - **Run it automatically** — tick **run automatically when content changes**
   and the link fires by itself shortly after the source node's content goes
@@ -77,4 +80,6 @@ Press **Escape** or click empty canvas to close the inspector.
 
 Links run on your machine through the app's link engine. Each run is isolated:
 a failing link (a bad file path, an unreachable peer) reports the error in the
-inspector and never takes the app down.
+inspector and never takes the app down. Editor links use the saved file; remote
+editor sources are not currently supported and report that limitation instead
+of reading a same-named local file.
