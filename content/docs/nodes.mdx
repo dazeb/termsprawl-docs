@@ -98,14 +98,19 @@ terminal setup.
 
 A real, sandboxed Chromium page embedded on the canvas — not a screenshot. Each
 **tab is its own `<webview>` guest**, so tabs run side by side and share a
-persistent cookie profile (logins survive app restarts).
+persistent cookie profile. Persistent cookies survive app restarts; sites may
+still expire a login or require you to sign in again.
+
+New browser nodes open at **1000 × 720**. Select a browser node to resize it;
+there is no small-window size cap. Existing nodes keep their saved sizes.
 
 - **One guest per tab** — open tabs from the node toolbar; every tab is an
   isolated page. Close the last tab and the node closes (browser convention).
 - **Hardened by default** — the guest never carries termsprawl's preload or
   Node, runs with the Chromium sandbox on, and navigation is policy-filtered
-  (privileged schemes like `file:` and `devtools:` are blocked). Popups are
-  denied, so nothing escapes the node.
+  (privileged schemes like `file:` and `devtools:` are blocked). Web sign-in
+  popups open in sandboxed child windows using the same browser profile. They
+  close with their parent tab; nested popups are blocked.
 - **Drag / interact** — drag the tab bar or the page to move the node; hover
   the page without pressing and it becomes interactive after a moment (the same
   dwell model as terminals). The address bar navigates through the safe
@@ -114,6 +119,23 @@ persistent cookie profile (logins survive app restarts).
   on *allow agents to control browser nodes* to expose an agent-driveable CDP
   surface. When off, the node works normally and no agent endpoint exists at
   all.
+
+### Share a signed-in session with an agent
+
+1. Open a browser node and sign in to the site yourself, including any MFA.
+2. Enable **allow agents to control browser nodes** in **Settings → Browser**.
+3. Ask the agent to attach to the existing canvas browser and use its open tab.
+   Starting a separate browser creates a separate session.
+
+You and the attached agent use the same tabs and cookies. Browser tabs across
+canvas nodes share this profile, so signing out affects the agent too. Agents
+can read and update cookies through the authenticated browser connection;
+updates are stored in the browser profile. You do not need to paste cookies
+into a prompt or export them with a workspace.
+
+The connection supports Playwright's cookie and storage-state APIs on the
+existing browser context. Persistent login state remains local to this app's
+browser profile. A site's restrictions on embedded-browser sign-in still apply.
 
 The embedded pages are real Chromium that you use directly, so you can do the
 online work that doesn't belong in a shell — a dashboard, an internal app, a
