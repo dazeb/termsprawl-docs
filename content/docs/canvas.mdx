@@ -87,23 +87,24 @@ the edge to configure what it does. Links are saved with the project. See
 
 ## The right-click menu
 
-Right-click on the canvas or a node for the context menu. It offers:
+Right-click on the canvas or a node for the context menu. Actions are grouped
+into three sections:
 
-- **Group selection** — frame selected nodes into a group (or **Ungroup** on
-  a group frame).
-- **Close** — close the node under the cursor.
-- **A2A send to peer ▸** — agent nodes only; forward the agent's output to a
-  peer machine. See [Agent-to-agent](/docs/a2a).
-- **Branch session** / **Resume session in new node** / **link to another
-  agent ▸** — Claude agent nodes. See [Agents](/docs/agents).
-- **New terminal** — add a terminal to the active project.
-- **New sticky note** — add a note.
-- **New diff** — add a diff view.
-- **New editor** — add a file editor.
-- **New browser** — add an embedded browser node.
-- **New chat** — add a chat node (an AI conversation panel, not a terminal).
-- **Open druk** — open the druk TUI editor in the project folder.
-- **Open agent ▸** — choose an agent (Claude, Codex, Antigravity, Grok) to spawn.
+- **Open agent** — click Claude Code, Codex CLI, Antigravity, Grok, or OpenClaude
+  directly to launch it. Each entry has a small monochrome logo or monogram.
+- **Create** — Terminal, Sticky note, Editor, Browser, Chat, Diff, and Druk
+  editor add their corresponding nodes to the active project.
+- **Selection** — actions for the selected nodes or the node under the cursor:
+  Group selection / Ungroup, Close, and agent-specific actions. A2A send to
+  peer forwards output to another machine; Claude nodes also offer Branch
+  session, Resume session in new node, and links to other agents.
+
+Use **↑ / ↓** to move through actions, **Home / End** to jump to the first or
+last action, and **Enter** to activate it. **Escape** or clicking outside closes
+the menu. Near a window edge the menu moves into view; in a short window it
+scrolls so every action remains reachable.
+
+See [Agents](/docs/agents) and [Agent-to-agent](/docs/a2a) for agent actions.
 
 ## The project sidebar
 
