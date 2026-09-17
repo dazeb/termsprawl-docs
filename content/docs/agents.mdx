@@ -47,6 +47,12 @@ reattaches to that agent without starting a second copy.
 
 For SSH projects, install the selected agent CLI on the remote host.
 
+## Workspace tools
+
+Local agents can use termsprawl browsers, terminals, canvas layout, linked
+context, and file previews. See [Agent tools](/docs/agent-tools) for automatic
+setup, connection badges, supported agents, and external terminal windows.
+
 ## Status badges
 
 Agents that support hooks drive their status from the CLI. The node badge
@@ -66,7 +72,9 @@ Claude Code nodes support conversation continuity:
 
 You can link agent nodes together so they can read each other's transcripts on
 demand. Right-click an agent node, choose **link to another agent ▸**, and pick
-a peer. This lets agents share context without you copying text between them.
+a peer. Agents can request context without you copying text between them.
+Transcript reading currently supports linked Claude transcripts; unsupported
+formats are reported as unavailable.
 
 ## Connect agents with node links and A2A
 

@@ -1,0 +1,135 @@
+---
+title: Agent tools
+description: Let local agents use visible browsers, terminals, canvas layout, linked context, and file previews.
+---
+
+Agents launched from termsprawl can use tools for the workspace around them.
+Keep the agent's project tab selected while it works with these tools. This
+integration is available in the Linux desktop app for local projects; remote
+SSH agents and Server Edition do not receive it yet.
+
+## Check the connection
+
+Launch an agent from the canvas. Its header shows a separate tool-integration
+badge; hover over it for the detected adapter, version, and diagnostic reason.
+
+| Badge | Meaning |
+| --- | --- |
+| **Connected** | The agent has authenticated to the termsprawl tool service. |
+| **CLI fallback** | The detected agent supports startup instructions for invoking the command-line helper. Its own shell permissions still apply. |
+| **Needs setup** | The native connection has not arrived, instruction delivery could not be verified, or an older running session needs restarting. |
+
+These badges are separate from **RUNNING** and **NEEDS YOU**, which report
+agent activity through hooks.
+
+| Agent | Automatic integration |
+| --- | --- |
+| Claude Code | MCP when its installed executable advertises the required configuration and instruction flags. |
+| Codex CLI | MCP when its installed executable advertises configuration overrides and MCP. |
+| Antigravity / Gemini | Command-line fallback when the actual executable advertises an interactive startup prompt. |
+| Grok | Command-line fallback when its executable advertises an initial interactive prompt. |
+| OpenClaude | Command-line fallback when an initial interactive prompt is advertised; otherwise **Needs setup**. |
+| Custom agent | Explicit executable and instruction configuration; unverified instruction delivery remains **Needs setup**. |
+
+The tools preserve the agent's existing account, permissions, and other MCP
+servers. They do not automatically approve tool calls. Settings → **MCP
+Servers** includes the termsprawl bridges supplied to managed sessions.
+
+## Work in a visible browser
+
+Enable **Allow agents to control browser nodes** in Settings first. Ask an
+agent to open a browser in termsprawl and inspect the page. It can navigate,
+read visible text and controls, click, fill inputs, and capture the viewport.
+The browser uses the same sign-in profile as your other embedded browser nodes.
+
+Each agent controls the browser nodes it creates. An agent can claim an
+unowned browser, or the current owner can transfer control to another agent
+in the same project. Agents should inspect the page before interacting with
+it and use the returned node IDs.
+
+## Use terminals and external windows
+
+Ask an agent to open a separate shell terminal for commands. The tools
+separate **submit a command** (which presses Enter) from **send raw input**.
+An agent can read recent output and interrupt a running command. Commands
+should not be submitted into an agent's own prompt.
+
+An agent can also open a separate Linux terminal window showing the same
+managed session. Opening the window keeps the canvas terminal attached;
+closing the external window detaches that view. Permanently closing the
+managed terminal destroys its session. External windows require tmux and a
+supported terminal emulator.
+
+Automatic detection checks `x-terminal-emulator`, Kitty, Alacritty, GNOME
+Terminal, Konsole, and xterm. To configure another launcher, use the
+`preferencesFile` path returned by the diagnostic command below. For example:
+
+```json
+{
+  "externalTerminal": {
+    "executable": "/usr/bin/alacritty",
+    "args": ["-e", "{command}"]
+  }
+}
+```
+
+`{command}` must appear exactly once as its own argument. The launcher
+expands it into the managed session attachment command; it is not a shell
+expression.
+
+## Organize and share work
+
+Agents can list and select nodes, move and resize them, group top-level nodes,
+and create sticky notes. They can open project files in editor or diff nodes,
+including existing image previews. Video and other unsupported binary formats
+return an error rather than opening a broken preview.
+
+Agents can launch another installed preset with the same automatic setup.
+Context links are available from agent-node menus. Transcript reading currently
+supports linked Claude transcripts; other transcript formats are not claimed
+as readable. An unavailable transcript is reported as unavailable.
+
+## Diagnose or configure a session
+
+Ask the agent to run:
+
+```sh
+"$TERMSPRAWL_CTL" doctor
+```
+
+This checks its connection and reports its identity, capabilities, integration
+status, and the paths for preferences and workflow guides. The helper ships
+with termsprawl and does not require a separate Node installation.
+
+Agents without native MCP can invoke the same tools, for example:
+
+```sh
+"$TERMSPRAWL_CTL" call canvas_list '{}'
+"$TERMSPRAWL_CTL" call guide_read '{"topic":"browser"}'
+```
+
+For a custom agent, add its executable to the preferences file. An optional
+`instructionFlag` must be a flag that the chosen CLI accepts with instruction
+text as its next argument. Do not invent a flag for an unsupported CLI.
+
+```json
+{
+  "custom": {
+    "executable": "/absolute/path/to/my-agent",
+    "instructionFlag": "--append-system-prompt"
+  }
+}
+```
+
+The custom preset remains hidden from the default canvas menu; an integrated
+agent can launch it through `agent_launch` once configured.
+
+Already-running sessions retain their process when reattached. A session
+started before this integration was available needs a new agent launch to
+receive it. Sessions launched with the integration reconnect after an app
+restart. Independently launched agents are not automatically configured: they
+need an explicit connection to a managed session's helper and session file.
+Keep session files private, since they contain connection credentials.
+
+If an operation times out, inspect the canvas before retrying. A timeout does
+not prove that a change was never applied.
