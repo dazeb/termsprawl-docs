@@ -7,7 +7,8 @@
     "dev": "react-router dev",
     "start": "serve ./build/client --config ../../serve.json",
     "types:check": "react-router typegen && tsc --noEmit",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "test": "node --test \"scripts/*.test.mjs\""
   },
   "dependencies": {
     "@react-router/node": "^8.3.0",

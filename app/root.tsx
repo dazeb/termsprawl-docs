@@ -35,10 +35,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex flex-col min-h-screen">
-        <div className="alpha-banner" role="note">
-          <strong>Alpha testing.</strong> termsprawl is in active development —
-          the app is free while we test, and payments are not accepted yet.
-        </div>
         <RootProvider search={{ SearchDialog }}>{children}</RootProvider>
         <ScrollRestoration />
         <Scripts />
