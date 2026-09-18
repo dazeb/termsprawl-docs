@@ -38,6 +38,44 @@ function readFlat(relativePath) {
   return read(relativePath).replace(/\s+/g, ' ')
 }
 
+/**
+ * Claims that are false for the shipped service. A page may state one only to
+ * deny it, because a reviewer needs the explicit "not end-to-end" wording.
+ * Each entry is [pattern, human label].
+ */
+const CLOUD_CLAIM_PATTERNS = [
+  [/encrypted before/i, 'encrypted-before-upload claim'],
+  [/\bend[-\s]?to[-\s]?end\b/i, 'end-to-end encryption claim'],
+  [/\bE2E\b/, 'E2E encryption claim'],
+  // Subject-aware on purpose: "one account cannot read another's data" is a
+  // cross-tenant isolation fact, not a claim that the service cannot read
+  // yours. Only a service/we/cloud subject making that claim is a violation.
+  [/(?:service|server|cloud|we|provider)\s+(?:can(?:no|')?t|cannot|never|is unable to)\s+read/i, 'service-cannot-read claim'],
+  [/(?:can(?:no|')?t|cannot|never)\s+read\s+(?:your|the user's|your own)\s+(?:data|backups?|workspace|files)/i, 'service-cannot-read claim'],
+  [/your key\b/i, 'user-held-key claim'],
+  [/client[-\s]side/i, 'client-side encryption claim'],
+  [/whole workspace/i, 'over-stated backup scope'],
+  [/delete individual backups|delete a single backup|per-backup delete/i, 'individual backup-delete claim'],
+]
+
+/** Split flattened prose into sentences for claim-by-claim checking. */
+function flattenSentences(text) {
+  return text.replace(/\s+/g, ' ').split(/(?<=[.!?])\s+/)
+}
+
+/**
+ * True when the denial attaches to the claim itself rather than to anything
+ * else in the sentence. A sentence-wide "is there any negation?" test is
+ * defeated by ordinary phrasing: "encrypted before they leave your machine,
+ * with no exceptions" contains "no" and would wrongly pass.
+ */
+function isDenied(sentence, claimIndex) {
+  const before = sentence.slice(Math.max(0, claimIndex - 60), claimIndex)
+  return /\b(?:not|no|never|nothing|isn't|doesn't|is not|are not|cannot|can't|rather than|lacks?|without)\b[^.!?]{0,20}$/i.test(
+    before
+  )
+}
+
 // App files users actually read on — the badge, the chrome, and the docs app.
 const APP_SOURCE_FILES = [
   'app/root.tsx',
@@ -165,22 +203,54 @@ test('cloud.mdx describes the shipped backup scope, transport, and at-rest encry
   // backup scope than the code implements, live billing, per-backup deletion.
   // A sentence may name one of these only to deny it (a reviewer needs the
   // explicit "not end-to-end" statement); a positive claim is a failure.
-  const NEGATION = /\b(?:not|no|never|nothing|isn't|doesn't|cannot|can't|rather than|lacks?)\b/i
-  const sentences = cloud.replace(/\s+/g, ' ').split(/(?<=[.!?])\s+/)
-  for (const [pattern, label] of [
-    [/encrypted before/i, 'encrypted-before-upload claim'],
-    [/\bend[-\s]?to[-\s]?end\b/i, 'end-to-end encryption claim'],
-    [/\bE2E\b/, 'E2E encryption claim'],
-    [/(?:can(?:no|')?t|cannot|never)\s+read/i, 'service-cannot-read claim'],
-    [/your key\b/i, 'user-held-key claim'],
-    [/client[-\s]side/i, 'client-side encryption claim'],
-    [/whole workspace/i, 'over-stated backup scope'],
-    [/delete individual backups|delete a single backup|per-backup delete/i, 'individual backup-delete claim'],
-  ]) {
-    for (const sentence of sentences) {
-      if (pattern.test(sentence)) {
-        assert.match(sentence, NEGATION, `cloud.mdx must not make the ${label}: "${sentence.trim()}"`)
+  //
+  // The denial must attach to the claim itself. A sentence-wide "any negation
+  // anywhere" test is defeated by ordinary phrasing — "encrypted before they
+  // leave your machine, with no exceptions" contains "no" and would pass.
+  for (const [pattern, label] of CLOUD_CLAIM_PATTERNS) {
+    for (const sentence of flattenSentences(cloud)) {
+      const claim = pattern.exec(sentence)
+      if (!claim) continue
+      assert.ok(
+        isDenied(sentence, claim.index),
+        `cloud.mdx must not make the ${label}: "${sentence.trim()}"`
+      )
+    }
+  }
+
+  // A claim added to a neighbouring page would otherwise slip past every
+  // check above. Relay's genuine end-to-end wording lives in relay.mdx, so the
+  // bare end-to-end patterns are scoped to cloud.mdx — here they only count
+  // when the sentence is also talking about cloud backups.
+  for (const relative of ['content/docs/index.mdx', 'content/docs/faq.mdx']) {
+    const page = readFlat(relative)
+    for (const [pattern, label] of CLOUD_CLAIM_PATTERNS) {
+      if (label === 'end-to-end encryption claim') continue
+      for (const sentence of flattenSentences(page)) {
+        const claim = pattern.exec(sentence)
+        if (!claim) continue
+        assert.ok(
+          isDenied(sentence, claim.index),
+          `${relative} must not make the ${label}: "${sentence.trim()}"`
+        )
       }
+    }
+  }
+})
+
+test('backup-scope claims stay honest on any page that mentions backup', () => {
+  const backupPages = ['content/docs/index.mdx', 'content/docs/faq.mdx', 'content/docs/cloud.mdx']
+  const CLOUD_CONTEXT = /\bbackup|backed up|cloud\b/i
+
+  for (const relative of backupPages) {
+    for (const sentence of flattenSentences(readFlat(relative))) {
+      if (!CLOUD_CONTEXT.test(sentence)) continue
+      if (!/\bend[-\s]?to[-\s]?end\b|\bE2E\b/i.test(sentence)) continue
+      const claim = /\bend[-\s]?to[-\s]?end\b|\bE2E\b/i.exec(sentence)
+      assert.ok(
+        isDenied(sentence, claim.index),
+        `${relative} must not call cloud backup end-to-end encrypted: "${sentence.trim()}"`
+      )
     }
   }
 })

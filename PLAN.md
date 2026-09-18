@@ -13,7 +13,7 @@ verified-facts ledger.
 - Branded to termsprawl: dark theme, lime `#02af3e` functional signal, Geist +
   Geist Mono (see `app/app.css`). `app/lib/shared.ts` has `appName`, the
   `/docs` route, and the repo's `gitConfig`.
-- 17 docs pages under `content/docs/` — index, getting-started, projects,
+- 16 docs pages under `content/docs/` — index, getting-started, projects,
   canvas, terminals, nodes, node-links, agents, agent-tools, a2a,
   source-control, cloud, relay, shortcuts, settings, faq — plus `meta.json`
   nav order.
