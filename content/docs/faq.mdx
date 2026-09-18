@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: Common questions about requirements, launch errors, and the platform.
+description: Common questions about requirements, launch errors, telemetry, security reports, and the project's maturity.
 ---
 
 ## What do I need to run it?
@@ -73,11 +73,43 @@ Each project's layout is kept in a git-shareable project file inside the folder.
 That's why you can commit it with your work and share it. The app keeps its own
 index of projects and settings in its private data directory.
 
+## Does termsprawl collect telemetry?
+
+No. The app has no analytics or usage telemetry. Two things do reach the
+network, and both are visible behaviour rather than background spying:
+
+- **Update checks.** Packaged builds ask GitHub Releases for the latest
+  version, which also feeds the "what's new" announcement. Unpackaged builds
+  skip this.
+- **Integrations you enable.** Signing in to Cloud, pairing a relay or A2A
+  peer, importing from GitHub, or checking for agent updates makes network
+  requests to those services. Nothing is contacted until you turn the feature
+  on, and the requests are the feature working — not tracking.
+
+## Is termsprawl finished?
+
+It's **Pre-1.0 · actively maintained**, and the docs say what that means: the
+project file format and internal interfaces can still change between minor
+releases, and there is one maintainer. Everything on this site describes
+shipped behaviour only.
+
+Termsprawl Cloud is in **preview**, and its billing is in **test mode** — the
+listed prices are preview prices and no real card is charged today. See
+[Termsprawl Cloud](/docs/cloud).
+
 ## How do I report a bug?
 
-Open an issue on the [termsprawl GitHub
-repo](https://github.com/dazeb/termsprawl/issues). Include your distro, the
+Open an issue in the [termsprawl GitHub
+issues](https://github.com/dazeb/termsprawl/issues). Include your distro, the
 version (shown in the toolbar), and the steps to reproduce.
+
+For a security problem, don't open a public issue — report it privately so
+there's room to fix it before it's public. Use GitHub's [private vulnerability
+reporting](https://github.com/dazeb/termsprawl/security/advisories/new); if you
+can't use GitHub advisories, email `daz@dazeb.dev` with the subject
+`termsprawl security`. Never include secrets in a report. See
+[SECURITY.md](https://github.com/dazeb/termsprawl/blob/main/SECURITY.md) for
+what a useful report contains and what to expect.
 
 ## An agent is missing or installation failed
 

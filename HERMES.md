@@ -27,22 +27,29 @@ Flow wiring). Those belong to the app repo's AGENTS.md, not here.
 
 ## Where it is (live)
 
-- The site is **live at https://docs.termsprawl.com**. Cloudflare A record
-  `docs` -> `178.104.6.193`, proxied; served by Caddy on hermes-box from
-  `/var/www/termsprawl-docs`; Let's Encrypt cert issued through the Cloudflare
-  proxy (HTTP-01, works because Cloudflare forwards the challenge to origin).
-- Current content: 10 pages — get-started (tutorial), canvas / projects /
-  agents / source-control (how-tos), terminals / cloud / faq (explanation),
-  nodes / shortcuts (reference), plus an index hub. Nav order in
-  `content/docs/meta.json`.
+- The site is **live at https://docs.termsprawl.com**. A proxied Cloudflare A
+  record (`docs`) reaches the deployment host; served by Caddy from
+  `/var/www/termsprawl-docs` with a Let's Encrypt cert issued through the
+  Cloudflare proxy (HTTP-01, works because Cloudflare forwards the challenge
+  to origin). The deploy script and AGENTS.md carry the host details.
+- Current content: index hub (get-started tutorial, projects / canvas /
+  agents / agent-tools / source-control how-tos, terminals / cloud / relay /
+  faq explanation, nodes / node-links / a2a / shortcuts / settings
+  reference). Nav order in `content/docs/meta.json`.
 
 ## Where it's going
 
 Keep the docs honest and current with the app. The app is actively developed
 through phases (see `../termsprawl/PLAN.md`); each shipped phase should get
-(and keep) accurate docs. Agents are the marquee differentiator — the agents
-page should grow as that feature set matures. The docs are a dedicated subdomain (`docs.termsprawl.com`), separate from the
-marketing site and the app.
+(and keep) accurate docs. The project is **pre-1.0 and actively maintained**,
+and the docs say exactly that — no stronger maturity claim than the code
+supports. Agents are the marquee differentiator — the agents page should grow
+as that feature set matures. The docs are a dedicated subdomain
+(`docs.termsprawl.com`), separate from the marketing site and the app.
+
+The public trust layer lives in the app repo (SECURITY.md, GOVERNANCE.md,
+ROADMAP.md, FUNDING.md, docs/PROJECT-HEALTH.md, docs/VERIFICATION.md); the docs
+index links it, and `pnpm test` fails if those links go missing.
 
 ## Working here
 

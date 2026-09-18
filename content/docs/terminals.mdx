@@ -47,8 +47,9 @@ context just because the app wasn't running.
 The same PTY mechanism powers other node kinds that are really a terminal
 running a preset command:
 
-- **Agents** — an agent node launches a CLI (Claude, Codex, Gemini, Grok) once,
-  inside tmux. Status badges come from the CLI's hooks. See [Agents](/docs/agents).
+- **Agents** — an agent node launches a CLI (Claude Code, Codex, Antigravity,
+  Grok, OpenClaude, or OpenCode) once, inside tmux. Status badges come from the
+  CLI's hooks. See [Agents](/docs/agents).
 - **druk** — a node that launches the druk TUI editor, still inside tmux, with
   the same hover-guard as a shell. Closing it kills the druk session.
 

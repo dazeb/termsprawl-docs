@@ -9,7 +9,7 @@ export function baseOptions(): BaseLayoutProps {
         <>
           {appName}
           <span className="rounded-full bg-fd-accent px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-fd-primary">
-            alpha
+            pre-1.0
           </span>
         </>
       ),

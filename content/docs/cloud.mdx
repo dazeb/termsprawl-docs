@@ -1,12 +1,14 @@
 ---
 title: Termsprawl Cloud
-description: Sign in, back up your workspace encrypted, and open your own hosted canvas space in a browser.
+description: Sign in, back up the active project's canvas state, and open your own hosted canvas space in a browser.
 ---
 
-Termsprawl Cloud is an optional account layer: encrypted workspace backup, and
-— on the Canvas plan — your own hosted canvas space that runs in a browser.
-This page explains what's backed up, how encryption works, how spaces work,
-and how to enable it all.
+Termsprawl Cloud is an optional account layer, in preview: encrypted backup of
+one project's canvas state, and — on the Canvas plan — your own hosted canvas
+space that runs in a browser. This page explains what's backed up, how the
+service stores it, how spaces work, and how to enable it all.
+
+The local app needs no account. Everything on this page is opt-in.
 
 ## Sign in
 
@@ -18,47 +20,75 @@ termsprawl.
 3. termsprawl shows a device code and opens GitHub for you to approve it.
 4. Once approved, you're signed in. The panel shows your GitHub login and plan.
 
-## What's backed up
+## What an ordinary backup covers
 
-The cloud backup covers your workspace state:
+Ordinary Cloud backup captures **one active project's canvas state** — the
+selected project's nodes and their layout, uploaded by the signed-in desktop
+app.
 
-- The list of projects (projects, folders, and remote SSH projects).
-- Each project's canvas layout.
-- App settings and preferences.
+It does not capture every project, the app's settings, tmux configuration,
+your source files, or your shell history. Those stay on your machine.
 
-<Callout type="info" title="What isn't backed up">
-  The cloud backs up your workspace state and layouts — not your files or your
-  shell history. Your code and documents stay on your machine.
+<Callout type="info" title="Three different things, easily confused">
+  - **Ordinary backup** — one active project's canvas state, stored per
+    account (this page, above).
+  - **Workspace bundle** — every project plus saved terminal scrollback as a
+    single JSON file you can export and re-import (Settings → Cloud & backup,
+    **export workspace…** / **open workspace…**). It works signed in or not.
+  - **Canvas snapshot sync** — the active project's canvas pushed to your
+    hosted space, and the space's latest snapshot pulled back into a new
+    local project.
 </Callout>
 
-## Encryption
+## Encryption and storage
 
-Backups are encrypted server-side with your key. Your workspace data leaves
-your machine only in encrypted form, and the service can't read it without your
-key. This is the "settings/layout/project backup" phase — the data that's
-backed up is the state that makes termsprawl yours, not your source code.
+Backups travel over **HTTPS**. Stored backups are encrypted **at rest** with
+**AES-256-GCM**, using a per-user key derived from the service's
+**master key** — one key per account, not one global key. When you open a
+backup, the service decrypts it for that authenticated request.
+
+That means the protection is about what sits on disk: it keeps stored data
+encrypted and unreachable without an authenticated account. It is not
+client-side encryption — the service holds the key material and can read what
+it stores. There is no user-held key and nothing here is end-to-end encrypted.
 
 ## Back up now
 
-Push a fresh snapshot of your workspace to the cloud on demand with **Back up
-now** in Settings. There's no scheduled automatic backup yet — run it when you
-want a checkpoint.
+**Settings → Cloud & backup → back up now** uploads a fresh snapshot
+immediately. There's no scheduled automatic backup yet — backups happen when
+you ask for one.
 
-## Plans
+The dashboard's **Back up now** is a request, not a backup: it asks your
+signed-in desktop app to run the backup, and the app completes it the next
+time it polls. If the app isn't running, the request waits.
+
+## Plans and billing
 
 Cloud accounts have three tiers:
 
 - **Free** — sign in, and that's it.
-- **Pro** — encrypted cloud backup + sync for your workspace ($2/mo).
+- **Pro** — encrypted cloud backup and sync ($2/mo).
 - **Canvas** — everything in Pro **plus your own online canvas space** ($5/mo).
 
-The status line in Settings shows which plan you're on, and upgrading is a
-checkout away from the same panel.
+Billing is wired but in **test mode**: the prices above are preview prices
+while the service is in preview, and **no real card is charged** today. The
+status line in Settings shows which plan you're on.
+
+## Cancellation, deletion, and your data
+
+- **Cancelling** stops new backups from being created. The backups you already
+  have stay listed and downloadable — the service deliberately keeps read
+  access open.
+- **Deleting your account** removes the account's cloud backups and the
+  space's stored snapshot.
+- There is **no per-backup delete action** in the app or dashboard today. To
+  remove everything at once, delete your account.
 
 ## Online canvas spaces
 
 The **Canvas** plan gives you a hosted termsprawl canvas that runs in your
-browser — same nodes, same terminals, reachable from any machine.
+browser — same nodes, and the space's terminals run in the space itself.
+Spaces are live today: one per user, provisioned under your GitHub login.
 
 1. In Settings, under the cloud section, choose **open your online canvas**.
    termsprawl provisions a private space for you (first time takes under a
@@ -81,7 +111,7 @@ Settings shows the space rows for the signed-in user:
 
 <Callout type="info" title="Snapshot sync, not live merge">
   Sync is pull-model snapshots: the online canvas stores the latest snapshot
-  of your workspace, and the desktop pushes or pulls whole snapshots. Your
+  of your canvas, and the desktop pushes or pulls whole snapshots. Your
   terminals' tmux sessions stay on the machine they run on — the online
   canvas runs its own terminals in the hosted space.
 </Callout>
@@ -95,22 +125,28 @@ Settings shows the space rows for the signed-in user:
 - **Idle spaces stop themselves** — a space nobody touches for 30 minutes is
   stopped automatically; opening it again wakes it (takes a few seconds) with
   your canvas intact.
-- **Deleting your account** stops the space and removes its data after a
-  7-day grace window.
+- **Deleting your account** removes the space's stored snapshot (see above).
 
-### Security & isolation
+### Security and isolation
 
 Each hosted space runs in its **own isolated container network** — no two
-spaces share a network, and the canvas server's boot credential is only ever
-handed to your own session (never readable from the app port). Cloud API
-routes that hold your data (backups, sessions, sync, space snapshots) are
-scoped to your account, carry `no-store` caching headers, and are verified by
-a two-account cross-tenant regression suite. Your backups and snapshots are
-encrypted at rest; the sync token a space uses to push snapshots expires
-after 30 days and is re-minted on every container start.
+spaces share a network. Cloud API routes that hold your data (backups,
+sessions, sync, space snapshots) are scoped to your account, carry `no-store`
+caching headers, and a two-account regression suite checks that one account
+cannot read another's data. Your backups and snapshots are encrypted at rest;
+the sync token a space uses to push snapshots expires after 30 days and is
+re-minted on every container start.
 
-<Callout type="tip" title="Why this matters">
-  Closed apps lose nothing because your sessions live in tmux. The cloud layer
-  is the next step: move to a new machine, sign in, and your whole workspace —
-  layouts, projects, settings — comes back with you.
+## What's next
+
+The hosted single canvas space is in preview and running today. Broader
+managed-platform work — the browser edition as a managed service, and wider
+remote access such as SSH relay and operations — is in development on the
+app's core, and **no date is promised** for it. When it ships, it will be
+documented here as shipped, not before.
+
+<Callout type="tip" title="The local app stands alone">
+  Closed apps lose nothing because your sessions live in tmux. Cloud is the
+  optional next step: move to a new machine, sign in, and open your hosted
+  canvas — with the account's backups there when you need them.
 </Callout>

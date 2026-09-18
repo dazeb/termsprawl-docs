@@ -12,9 +12,10 @@ separate from the app (`termsprawl`) and the marketing site (`termsprawl-web`).
 ```bash
 pnpm install        # install deps
 pnpm dev            # dev server (React Router / Vite)
-pnpm build          # production build into build/client
+pnpm build          # production build into build/client (prerenders every page)
 pnpm lint           # oxlint
 pnpm types:check    # react-router typegen + tsc --noEmit
+pnpm test           # content-consistency gates (node --test)
 ```
 
 ## Where the docs live
@@ -24,16 +25,26 @@ pnpm types:check    # react-router typegen + tsc --noEmit
 - `app/` — the React Router app (layout, routes, search, theme).
 
 Each page is focused on one reader need: a tutorial (get started), how-tos
-(canvas, projects, agents, source control), explanation (terminals, cloud,
-FAQ), and reference (nodes, shortcuts). Content is written from the app's real,
-shipped behaviour — documented features are implemented features.
+(canvas, projects, agents, agent tools, source control), explanation
+(terminals, cloud, relay, FAQ), and reference (nodes, node links, A2A,
+shortcuts, settings). Content is written from the app's real, shipped
+behaviour — documented features are implemented features.
+
+`pnpm test` enforces that at the text level: it gates the maturity label, the
+published policies linked from the index, the complete agent preset list, the
+cloud wording (at-rest encryption, backup scope, no per-backup delete), and the
+absence of stale claims (alpha badge, end-to-end encryption, revenue,
+command palette). If a claim becomes true, change the wording and the gate
+deliberately.
 
 ## Deploying
 
-The build is a static React Router SPA (`build/client`). It is **live at
-https://docs.termsprawl.com**: a Cloudflare A record (`docs` -> 178.104.6.193,
-proxied) serves it on hermes-box from `/var/www/termsprawl-docs` via Caddy, with
-an auto-issued Let's Encrypt certificate.
+The build is a static React Router SPA (`build/client`, every page
+prerendered). It is **live at https://docs.termsprawl.com**: a proxied
+Cloudflare A record serves it from the deployment host (see
+`scripts/deploy-hermes-box.sh` for the address) at
+`/var/www/termsprawl-docs` via Caddy, with an auto-issued Let's Encrypt
+certificate.
 
 Deploy with `./scripts/deploy-hermes-box.sh` — it builds, streams `build/client`
 over ssh+tar, and updates its own `# BEGIN/END managed termsprawl-docs` Caddy
@@ -43,6 +54,8 @@ deploy owns a separate managed block, so the two never clash.
 ## Related repos
 
 - [termsprawl](https://github.com/dazeb/termsprawl) — the app (source of truth).
+  Its public trust layer (SECURITY.md, GOVERNANCE.md, ROADMAP.md, FUNDING.md,
+  docs/PROJECT-HEALTH.md, docs/VERIFICATION.md) is linked from the docs index.
 - [termsprawl-web](https://github.com/dazeb/termsprawl-web) — the marketing site.
 
 ## License
