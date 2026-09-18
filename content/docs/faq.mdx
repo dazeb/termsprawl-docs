@@ -25,7 +25,7 @@ pacman -S tmux          # Arch
 ```
 
 Terminals will still appear without tmux, but they lose session continuity and
-scrollback across restarts. Install it and reopen the project.
+scrollback across restarts. Install it and restart Termsprawl. **Settings → Agents** can check the missing tools and open a guided installation terminal.
 
 ## The AppImage won't launch
 
@@ -78,3 +78,15 @@ index of projects and settings in its private data directory.
 Open an issue on the [termsprawl GitHub
 repo](https://github.com/dazeb/termsprawl/issues). Include your distro, the
 version (shown in the toolbar), and the steps to reproduce.
+
+## An agent is missing or installation failed
+
+Open **Settings → Agents** and choose **Check your setup**. Missing agents offer
+**Install**. If an installation fails, expand **Installation log**, check your
+connection or missing system utilities, then choose **Retry**. Updates and
+installation use official distribution sources; an offline update check does
+not make an already working agent unavailable.
+
+If an existing executable is incompatible, repair it through its original
+vendor or package manager. Termsprawl will not replace external installations.
+Close an agent's sessions before updating an installation made through setup.

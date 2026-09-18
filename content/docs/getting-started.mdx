@@ -127,3 +127,28 @@ scrollback resumes.
   projects.
 - [Agents](/docs/agents) — run an AI agent as a node.
 - [Source control](/docs/source-control) — stage and commit from the canvas.
+
+## Check your local setup
+
+Choose **Check your setup** on the welcome screen, or open **Settings → Agents**.
+Termsprawl checks local tools without delaying the canvas. All agent installations
+are optional. See [Agents](/docs/agents) for installing and updating them.
+
+- **tmux 3.2 or newer** provides terminal continuity across app restarts.
+- **Git** enables cloning and repository actions.
+- Installer utilities such as Bash, curl, tar, and unzip are checked too.
+
+If system tools are missing, setup offers a command for apt, dnf, pacman, or
+zypper in a visible local terminal. Review it and enter your password at the
+normal sudo prompt. On other distributions, use your package manager to install
+the listed tools. Reopen setup and choose **Check your setup** afterward.
+If tmux was installed while Termsprawl was running, restart the app to enable
+continuity for new terminals; setup does not replace existing sessions.
+
+### AppImage cannot start
+
+The setup screen is only available after the app starts. AppImages need FUSE:
+use `libfuse2t64` on Ubuntu 24.04, `libfuse2` on older Ubuntu releases,
+`fuse-libs` on Fedora, or `fuse2` on Arch. As an alternative, run the downloaded
+AppImage with `--appimage-extract-and-run`. The `.deb` package avoids the
+AppImage FUSE requirement.

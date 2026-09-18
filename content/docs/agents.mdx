@@ -1,6 +1,6 @@
 ---
 title: Agents
-description: Run Claude, Codex, Antigravity, Grok, or OpenClaude as canvas nodes — spawn, status badges, context links, accounts, and permission modes.
+description: Run Claude, Codex, Antigravity, Grok, OpenClaude, or OpenCode as canvas nodes — spawn, status badges, context links, accounts, and permission modes.
 ---
 
 An **agent node** is a terminal node preset that launches an AI coding agent CLI
@@ -9,13 +9,14 @@ transcript and status shown on the canvas.
 
 ## Supported agents
 
-termsprawl ships presets for five CLIs, plus a custom template:
+termsprawl ships presets for six CLIs, plus a custom template:
 
 - **Claude Code** — full support: hooks/status, resume, subagents, recurring, branch, context links, usage, permission mode.
 - **Codex CLI** — hooks/status (RUNNING / NEEDS YOU), resume, subagents, permission mode.
 - **Antigravity** (the Gemini CLI's successor — the preset is still `gemini` so existing nodes keep working; the app resolves it to the `agy` binary on modern installs) — resume, subagents, usage, permission mode.
 - **Grok** — resume, subagents, recurring, branch, usage, permission mode.
 - **OpenClaude** — a Claude-Code-compatible TUI for any OpenAI-compatible endpoint. Point it at your **local models** (Ollama, llama.cpp, LM Studio, …) or any provider. No badge support yet.
+- **OpenCode** — a terminal agent with a choice of model providers. Open it and use `/connect` to configure a provider. No status badges yet.
 - **Custom agent** — a template you configure. It is not enabled by default.
 
 <Callout type="info" title="Status badges are honest">
@@ -25,19 +26,41 @@ termsprawl ships presets for five CLIs, plus a custom template:
   deliver.
 </Callout>
 
-<Callout type="info" title="You need the CLI installed">
-  termsprawl launches the agent binary from your PATH (GUI launches also check
-  `~/.local/bin` and `~/bin`; Antigravity resolves to `agy`). Install `claude`,
-  `codex`, `agy`, `grok`, or `openclaude` yourself first; the agent node just
-  runs it in your project. When the binary is missing, the node shows a notice
-  naming it instead of closing silently.
-</Callout>
+## Install and check agents
+
+On the Linux desktop, choose **Check your setup** during onboarding, or open
+**Settings → Agents**. Each agent shows its detected executable, version, and
+whether it was installed through setup. You can skip agents you do not need.
+
+1. Click **Install** beside an agent you want. Setup downloads the current stable
+   distribution from its official source and shows progress and an installation log.
+2. Wait for verification to finish, then click **Open**.
+3. Follow the agent's sign-in or provider setup. OpenClaude uses `/provider`;
+   OpenCode uses `/connect`. Installing a CLI does not authenticate you.
+
+Setup uses the vendors' user installation locations. OpenClaude gets a separate
+user-owned package directory and, when needed, a compatible Node LTS runtime.
+You do not need to configure a global npm prefix or change PATH for it.
+
+Existing external installations are detected and preserved. Update or repair
+those using their vendor or package manager. **Check for updates** offers an
+**Update** button for tools installed through setup. Close that agent's sessions
+before updating; vendor-managed automatic updates retain their normal behavior.
+
+Closing the setup panel leaves an installation running. If a download or
+verification fails, expand **Installation log**, correct the problem, and click
+**Retry**. Offline update checks do not prevent using working installed agents.
+
+Selecting a missing agent from the canvas opens setup. After installation,
+**Open** creates its node. SSH projects still require tools installed on the
+remote host; this setup flow only installs onto the desktop computer.
+
 
 ## Spawn an agent
 
 1. Right-click on the canvas.
 2. Click **Claude Code**, **Codex CLI**, **Antigravity**, **Grok**, or
-   **OpenClaude** directly in the **Open agent** section. The small marks help
+   **OpenClaude**, or **OpenCode** directly in the **Open agent** section. The small marks help
    you recognize each agent; no submenu is needed.
 
 A terminal node opens and starts the selected agent automatically. For example,
