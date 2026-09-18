@@ -39,6 +39,13 @@ jobs:
           pnpm lint
           pnpm types:check
 
+      # Content-consistency gates (maturity badge, cloud/encryption wording,
+      # backup scope, agent list, trust links). These are the only mechanical
+      # check that the docs still describe shipped behaviour, so they run here
+      # rather than relying on a contributor to remember `pnpm test`.
+      - name: content consistency
+        run: pnpm test
+
       - name: build
         run: pnpm build
 
