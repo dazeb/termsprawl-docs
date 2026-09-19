@@ -162,6 +162,43 @@ your hosted canvas space. See [Cloud](/docs/cloud).
 The Telegram bot and the relay service — how this machine talks to your phone
 and to other machines. See [Relay](/docs/relay).
 
+### Telegram setup and menus
+
+1. Create a bot with [BotFather](https://t.me/BotFather) and copy its token.
+2. In **Settings → Connections → Telegram bot**, paste the **Bot token**,
+   leave the field to save it, and turn on **Enable Telegram bot**.
+3. Open your bot's private chat in Telegram and send `/start`. When the allowed
+   chat list is empty, the first chat to do this becomes the owner. If you
+   already listed allowed chat ids, only those chats can control the app.
+4. The app registers its commands and Telegram's **Menu** button automatically
+   when the bot starts. No manual BotFather command list is needed.
+
+Send `/menu` to open clickable buttons for **Projects**, **Terminals**,
+**Status**, **Stop stream**, **Help**, and **Cancel**. Choose **Terminals**,
+then a terminal to **Read output**, **Stream output**, or **Send text**.
+Long terminal lists have **Previous** and **Next** buttons.
+
+**Send text** asks for your next message and sends it to the chosen terminal
+with Enter, preserving line breaks. This can execute a shell command. The
+request belongs to the person who selected it, expires after five minutes,
+and is cancelled by `/cancel` or by choosing another menu action. Slash
+commands remain bot commands; use `/send <id> <text>` to send text beginning
+with a slash to a terminal.
+
+Streaming stops after five minutes, when you choose **Stop stream** or send
+`/detach`, or when the chat loses access. Menu buttons expire after ten
+minutes or when the bot restarts; send `/menu` to get fresh buttons. Keep the
+desktop app running to use the bot.
+
+Typed commands remain available: `/start`, `/menu`, `/help`, `/projects`,
+`/terminals`, `/status`, `/peek <id>`, `/attach <id>`, `/send <id> <text>`,
+`/detach`, and `/cancel`. `/peek`, `/attach`, and `/send` without an id open
+terminal selection. A full terminal id or a unique prefix works when typing.
+
+If Telegram's command menu is missing, disable and re-enable the bot to retry
+registration, then reopen the chat. `/menu` also opens navigation directly.
+
+
 <Callout type="warn" title="Credentials live in Settings">
   Provider keys, peer tokens and account logins are stored by the app and edited
   here. Don't export them into shells or project files.
