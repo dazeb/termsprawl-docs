@@ -36,6 +36,24 @@ The tools preserve the agent's existing account, permissions, and other MCP
 servers. They do not automatically approve tool calls. Settings → **MCP
 Servers** includes the termsprawl bridges supplied to managed sessions.
 
+## Shared Termsprawl instructions
+
+Each new managed launch receives the same dedicated Termsprawl prompt. It
+explains workspace discovery, tool use, and automatic request/reply work on
+enabled agent links. Claude receives appended system instructions; Codex
+receives MCP server instructions; Gemini and other supported fallback agents
+receive startup prompt text through their detected adapter.
+
+To inspect the supplied prompt from a managed session, run:
+
+```sh
+cat "$TERMSPRAWL_SYSTEM_PROMPT_FILE"
+```
+
+This is a generated copy refreshed on a new launch. Already-running sessions
+keep their existing instructions when reattached. The prompt is supplied to
+Termsprawl-managed sessions only.
+
 ## Work in a visible browser
 
 Enable **Allow agents to control browser nodes** in Settings first. Ask an
