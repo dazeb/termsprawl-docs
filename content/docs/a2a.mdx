@@ -1,9 +1,64 @@
 ---
 title: Agent-to-agent (A2A)
-description: Connect termsprawl to other machines and agents over the Google A2A protocol — configure peers, send agent output to them, and expose your agents to peers.
+description: Let connected canvas agents exchange requests and replies, or configure external A2A peers.
 ---
 
-**Agent-to-agent (A2A)** lets termsprawl talk to agents running elsewhere —
+## Connect agents on your canvas
+
+In the Linux desktop app, local agents can send work to each other through
+one shared backend. Each agent has its own identity card. The same workflow
+instructions are supplied to every managed agent: Codex uses MCP when
+available, while Gemini / Antigravity can use the bundled command-line helper.
+
+1. Launch both agents from termsprawl in the same local project.
+2. Drag a link from the source agent to the target agent.
+3. Click the edge, choose **Inject context**, and enable **Allow agent requests**.
+4. Ask the source agent to discover its peers and send work to the target.
+
+Requests on enabled links are submitted automatically to the target's prompt.
+The source reads the result by task ID; the target returns it with the reply
+tool. A reply does not require a reverse link. Enable a reverse link if the
+target should also be able to initiate new requests to the source.
+
+The **Allow agent requests** switch is off by default and is separate from
+**run automatically when content changes**. Existing context links continue
+to share context without granting permission to submit requests. An enabled
+request link shows an `a2a` chip on the canvas.
+
+| Tool | Purpose |
+| --- | --- |
+| `agent_cards` | Read agent identities, integration status, and enabled outgoing peers. |
+| `agent_send` | Submit work with a target node ID, text, and unique message ID. |
+| `agent_task` | Read the request's state and reply using its task ID. |
+| `agent_reply` | Complete or fail a request addressed to the replying agent. |
+
+The helper exposes the same operations, for example:
+
+```sh
+"$TERMSPRAWL_CTL" call guide_read '{"topic":"agents"}'
+"$TERMSPRAWL_CTL" call agent_cards '{}'
+```
+
+Agents should use the returned IDs rather than guess them. Reusing a message
+ID with the same target and text retrieves the existing request; changing its
+payload is rejected. Each recipient accepts one outstanding request at a time.
+Requests expire after 15 minutes. Restarting the app marks unresolved requests
+failed without submitting them again; recorded replies remain available.
+
+Keep the project tab selected while using these tools. Both sessions need
+working termsprawl integration. CLI fallback remains subject to the agent's
+own tool permissions; automatically submitting a request does not bypass
+those permissions. SSH agents and Server Edition do not receive this bridge.
+
+The shared backend also offers authenticated per-node A2A 0.3 cards and the
+`message/send` and `tasks/get` JSON-RPC methods. This is a limited protocol
+surface; streaming, cancellation, and push notifications are not implemented.
+It listens on localhost and authenticates callers with their managed session
+identity, applying the same enabled-link rules as the tools.
+
+## External peers
+
+**Agent-to-agent (A2A)** also lets termsprawl talk to agents running elsewhere —
 another machine on your network, a teammate's agent, or a service that speaks
 the [Google A2A protocol](https://a2a-protocol.org) (JSON-RPC over HTTP).
 A2A is how an agent in one termsprawl sends its work to an agent in another.
@@ -52,6 +107,12 @@ peers on the machine can send tasks to them over the Google A2A protocol.
 To turn it on: open **Settings → A2A peers → Your nodes**.
 The endpoint's access token is written to `a2a-agent.json` in termsprawl's
 user-data folder.
+
+This separate opt-in receiver provides an aggregate card and a card for each
+live node. A node's card advertises its exact delivery endpoint, avoiding title
+matching. Responses acknowledge that text was delivered to the terminal;
+they do not contain the model's completed work. Use the local request/reply
+tools above for tracked exchanges between connected canvas agents.
 
 <Callout type="warn" title="Receiving is an opt-in local endpoint">
   Nothing listens until you flip the toggle, and even then the endpoint binds

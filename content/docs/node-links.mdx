@@ -71,6 +71,12 @@ the same two nodes again resets that link's behavior instead of duplicating it.
 
 Press **Escape** or click empty canvas to close the inspector.
 
+When both endpoints are local agent presets, **Inject context** also offers
+**Allow agent requests**. Enabling it lets the source submit work automatically
+to the target through the shared agent backend and read a correlated reply.
+It is off by default and separate from automatic content forwarding. See
+[Agent-to-agent](/docs/a2a#connect-agents-on-your-canvas) for the workflow.
+
 <Callout type="warn" title="Deleting a node deletes its links">
   When you delete a node, every link touching it is removed too — the same
   cascade as deleting a terminal's session. Delete links you still want first.
